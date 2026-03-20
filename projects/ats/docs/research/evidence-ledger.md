@@ -86,6 +86,44 @@ Running claim-by-claim audit trail. Updated after each completed research file.
 
 ---
 
+## From: integration-and-constraints.md (Pass 4)
+
+| # | Claim | Source File | Evidence Type | Source Grade | Source URL | Date Accessed | Confidence | What Would Change This |
+|---|-------|-------------|---------------|-------------|------------|---------------|------------|----------------------|
+| 51 | GDPR applies to any org processing data of EU-located individuals, regardless of where org is based | integration-and-constraints.md | primary regulatory | A | https://www.manatal.com/blog/gdpr-compliant (citing GDPR Art 3) | 2026-03-20 | high | Only if GDPR is repealed or significantly amended |
+| 52 | GDPR penalties: up to €20M or 4% of global annual turnover | integration-and-constraints.md | primary regulatory | A | EC GDPR Art 83 | 2026-03-20 | high | Only legislative change would alter |
+| 53 | UK right-to-work fine: £45,000/worker (first breach), £60,000/worker (repeat) — updated Feb 2024 | integration-and-constraints.md | primary regulatory | A | https://www.davidsonmorris.com/right-to-work/ (citing Immigration, Asylum and Nationality Act 2006 + 2024 CoP) | 2026-03-20 | high | Code of Practice subject to annual review |
+| 54 | UK right-to-work records must be retained for duration of employment + 2 years | integration-and-constraints.md | primary regulatory | A | https://www.gov.uk/government/publications/right-to-work-checks-employers-guide/employers-guide-to-right-to-work-checks-26-june-2025-accessible | 2026-03-20 | high | Confirmed primary source |
+| 55 | GDPR data retention recommended max: 6–12 months for unsuccessful candidates | integration-and-constraints.md | legal guidance | B | https://atzcrm.com/blog/gdpr-recruitment-candidate-data/ | 2026-03-20 | medium | Guidance from legal practitioners; not a statutory maximum — controller discretion within proportionality principle |
+| 56 | EU AI Act entered into force 1 August 2024; bans effective 2 February 2025; high-risk system obligations effective 2 August 2026 | integration-and-constraints.md | primary regulatory | A | https://www.hiretruffle.com/blog/eu-ai-act-hiring (citing EC official timeline) | 2026-03-20 | high | Official EC timeline confirmed |
+| 57 | AI-based CV screening, candidate ranking, interview analysis are classified as "high-risk" under EU AI Act | integration-and-constraints.md | regulatory analysis | B | https://www.hiretruffle.com/blog/eu-ai-act-hiring | 2026-03-20 | high | Consistent across multiple legal commentary sources |
+| 58 | EU AI Act prohibited uses (effective Feb 2025): emotion recognition in workplaces; biometric categorisation inferring protected traits; social scoring | integration-and-constraints.md | primary regulatory | A | https://www.hiretruffle.com/blog/eu-ai-act-hiring (citing AI Act Annexes) | 2026-03-20 | high | Text of AI Act confirmed |
+| 59 | EU AI Act penalties: up to €35M or 7% of global annual turnover for prohibited uses | integration-and-constraints.md | primary regulatory | A | https://www.hiretruffle.com/blog/eu-ai-act-hiring (citing Art 99) | 2026-03-20 | high | Text of AI Act confirmed |
+| 60 | EEOC 2023 guidance: four-fifths rule applies to AI screening tools; employer liability remains even when using third-party AI | integration-and-constraints.md | regulatory guidance | A | https://www.eeoc.gov/laws/guidance/employment-tests-and-selection-procedures + Mayer Brown analysis | 2026-03-20 | high | Non-binding guidance; may be superseded by future EEOC rulemaking |
+| 61 | France CNIL has 19-point recruitment data processing guidance framework | integration-and-constraints.md | regulatory guidance | B | https://www.gerrishlegal.com/blog/cnil-recruitment-guidelines-for-employers-best-practices-for-data-protection | 2026-03-20 | high | CNIL guidance confirmed via Baker McKenzie and Hogan Lovells sources |
+| 62 | Germany works council (Betriebsrat) consultation required before deploying HR/ATS tools; under BetrVG | integration-and-constraints.md | legal analysis | B | General knowledge of German BetrVG + domain-patterns.md reference | 2026-03-20 | high | Well-established German employment law |
+| 63 | Oracle OPERA Cloud + Maestro PMS: ~30–35% of global hotel PMS market | integration-and-constraints.md | industry report | B | https://www.marketreportanalytics.com/reports/hotel-pms-54278 | 2026-03-20 | medium | Single analyst source; market share figures vary by methodology |
+| 64 | Toast holds ~68% US market share among publicly traded restaurant tech companies | integration-and-constraints.md | industry report | B | https://www.spindl.app/en/blog/restaurant-pos-system-comparison | 2026-03-20 | medium | "Publicly traded restaurant tech" is a narrow subset; overall market share is lower |
+| 65 | Sterling has 30+ multi-regional ATS integrations | integration-and-constraints.md | vendor claim | C | https://www.sterlingcheck.com/services/global-checks/ | 2026-03-20 | high | Vendor website; plausible and consistent with Sterling's enterprise positioning |
+| 66 | Merge.dev and Finch provide unified payroll/HRIS API (single API to 50+ payroll systems) | integration-and-constraints.md | vendor claim | C | https://www.bindbee.dev/blog/guide-to-hris-integrations (market overview) | 2026-03-20 | high | Category well-documented; both vendors publicly accessible |
+| 67 | GDPR does not mandate EU data hosting, but EU hosting is the safest compliance path | integration-and-constraints.md | legal analysis | B | https://www.digitalsamba.com/blog/does-gdpr-require-eu-data-hosting | 2026-03-20 | high | Consistent across multiple GDPR legal commentary sources |
+| 68 | Recruitee (Tellent) has native WhatsApp ATS integration — proof of concept for the category | integration-and-constraints.md | vendor claim | C | https://recruitee.com/whatsapp-hiring | 2026-03-20 | high | Vendor website; confirms technical feasibility |
+
+---
+
+## From: tech-landscape.md (Pass 5)
+
+| # | Claim | Source File | Evidence Type | Source Grade | Source URL | Date Accessed | Confidence | What Would Change This |
+|---|-------|-------------|---------------|-------------|------------|---------------|------------|----------------------|
+| 69 | Next.js + React 18 is a mainstream choice for B2B SaaS frontend in 2024–2025 | tech-landscape.md | industry consensus | B | https://brights.io/blog/saas-technology-stack | 2026-03-20 | high | Stable consensus; unlikely to shift meaningfully in <2 years |
+| 70 | PostgreSQL with row-level security is a viable multi-tenant architecture for mid-market SaaS | tech-landscape.md | industry consensus | B | https://www.ideadope.com/roadmaps/how-to-build-multi-tenant-saas-2025-advanced | 2026-03-20 | high | Well-established pattern |
+| 71 | AWS egress charges are 30–50% of bills for high-volume apps; highest of three major clouds | tech-landscape.md | industry analysis | B | https://wojciechowski.app/en/articles/azure-vs-aws-vs-gcp | 2026-03-20 | medium | Cost structures change; spot-check at architecture design stage |
+| 72 | AWS eu-west-1 (Ireland) and eu-central-1 (Frankfurt) are ISO 27001 and SOC 2 Type II certified | tech-landscape.md | vendor documentation | C | AWS compliance documentation (general knowledge) | 2026-03-20 | high | AWS publishes compliance reports via AWS Artifact |
+| 73 | Candidly (wearecandidly.com) offers white-label ATS for HRIS vendors | tech-landscape.md | vendor claim | C | https://www.wearecandidly.com/ | 2026-03-20 | medium | Small vendor; limited public validation of customer base |
+| 74 | iOS now supports PWA push notifications from iOS 16.4+ (broadly available) | tech-landscape.md | industry knowledge | B | General knowledge confirmed in multiple developer sources | 2026-03-20 | high | iOS 16.4+ adoption is now >90% globally |
+
+---
+
 ## Blocked / Awaiting Human
 
 | # | Data Needed | Likely Source | Why It Matters | Status |
