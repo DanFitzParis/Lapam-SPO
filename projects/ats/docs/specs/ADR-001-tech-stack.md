@@ -176,23 +176,27 @@ No direct client access to R2 buckets.
 
 ### 6. AI Integration
 
-**Decision:** Vercel AI SDK with OpenAI API (GPT-4o-mini for drafting tasks; GPT-4o for
-higher-quality outputs where latency is acceptable).
+**Decision:** Vercel AI SDK with a provider-agnostic interface. Default provider: Anthropic
+(Claude). Model selection is configuration-driven; no feature code references a specific provider.
 
 **Rationale:** Vercel AI SDK is TypeScript-native, designed for Next.js App Router (streaming
-responses work cleanly with Server Actions and Route Handlers), and has a provider-agnostic
-interface that allows the underlying model to be swapped without touching feature code. OpenAI
-is the primary provider because it has the strongest structured output support (`zod` schema
-enforcement on responses) which is essential for generating parseable job descriptions and
-structured interview question sets.
+responses work cleanly with Server Actions and Route Handlers), and is explicitly provider-agnostic
+— the provider is injected at the call site, not hardcoded in feature logic. This means the
+underlying model can be swapped or A/B tested without touching application code.
+
+Anthropic (Claude) is the default provider because the entire Lapam-ATS toolchain — from
+research through specification to building — runs on Anthropic models. Consistency across the
+toolchain reduces the integration surface, means the models generating application code and the
+models serving application features share capability assumptions, and simplifies vendor
+relationship management to a single provider for the initial build phase.
 
 **MVP AI features (all productivity tools — human reviews and uses output; AI never acts):**
 
-| Feature | Trigger | Model | Output |
+| Feature | Trigger | Default Model | Output |
 |---|---|---|---|
-| JD Generator | Operator enters role title + location type | gpt-4o-mini | Polished job description (editable before posting) |
-| Comms Drafter | Operator clicks "Draft message" on candidate card | gpt-4o-mini | Candidate communication draft (editable before sending) |
-| Interview Question Suggester | Operator opens interview prep for a candidate | gpt-4o-mini | Suggested questions for the role type (selectable checklist) |
+| JD Generator | Operator enters role title + location type | claude-haiku-4-5 | Polished job description (editable before posting) |
+| Comms Drafter | Operator clicks "Draft message" on candidate card | claude-haiku-4-5 | Candidate communication draft (editable before sending) |
+| Interview Question Suggester | Operator opens interview prep for a candidate | claude-haiku-4-5 | Suggested questions for the role type (selectable checklist) |
 
 **EU AI Act classification:** These features are assistive productivity tools. They generate
 content for a human to review, edit, and choose to use. They do not score, rank, or assess
@@ -205,8 +209,8 @@ ID, prompt structure (not full prompt — no candidate PII in the log). This sup
 reporting and future EU AI Act compliance if feature scope expands.
 
 **Alternatives considered:**
-- Anthropic Claude via AI SDK: viable alternative provider; OpenAI selected for stronger
-  structured output and broader LLM training data coverage of the SDK
+- OpenAI (GPT-4o): viable; rejected in favour of Anthropic for toolchain consistency (see
+  Design Rationale)
 - Hugging Face / self-hosted models: eliminates third-party data processing concerns but
   significantly increases infrastructure complexity; rejected for MVP
 
@@ -214,14 +218,22 @@ reporting and future EU AI Act compliance if feature scope expands.
 
 ### 7. Background Jobs and Scheduled Tasks
 
-**Decision:** Vercel Cron Jobs (for scheduled tasks) + database-backed job queue using
-`pg-boss` (for async task processing requiring retries and durability).
+**Decision:** Vercel Cron Jobs triggering Next.js API Route Handlers, with a lightweight
+`job_queue` table in PostgreSQL for durable async task tracking (status, retries, payload).
+No external job runner. No separate worker process.
 
-**Rationale:** Vercel Cron Jobs handle time-based triggers (GDPR auto-deletion scheduler,
-re-consent reminder sends, stale application cleanup). `pg-boss` runs as a background worker
-using the existing Neon PostgreSQL connection — no additional infrastructure (no Redis, no
-separate queue service). Jobs are defined in TypeScript alongside application code. For a single
-developer, having the job queue use the same database reduces operational surface to zero.
+**Rationale:** At MVP with no production users, the operational cost of a persistent worker
+process (e.g., a Fly.io instance running pg-boss) outweighs its benefits. Vercel Cron Jobs fire
+an authenticated HTTP request to a Route Handler on a schedule; the Route Handler reads pending
+rows from the `job_queue` table, processes them, and marks them complete or failed. This pattern
+is trivially understood by an agent — it is just a table and an API endpoint — and has zero
+infrastructure overhead. If a job fails, it stays in the queue with an incremented retry count.
+
+The `job_queue` table schema:
+```sql
+id, job_type, payload (jsonb), status (pending|running|done|failed),
+attempts, max_attempts, run_after (timestamp), created_at, updated_at
+```
 
 **Scheduled jobs at MVP:**
 - `gdpr.purge` — delete candidate records past retention period (runs nightly)
@@ -229,11 +241,16 @@ developer, having the job queue use the same database reduces operational surfac
   (runs weekly)
 - `application.stale-alert` — flag applications with no activity for 48+ hours (runs hourly)
 
+**Growth path:** If throughput demands a persistent worker (high send volume, sub-second
+latency requirements), replace the cron+queue pattern with Inngest or a dedicated BullMQ worker
+at that point. The `job_queue` table remains as the source of truth; only the trigger mechanism
+changes.
+
 **Alternatives considered:**
-- Redis + BullMQ: more capable but requires a Redis instance; additional operational overhead;
-  rejected for single-developer constraint
-- Inngest: event-driven, excellent DX; newer and smaller training corpus; worth revisiting
-  post-MVP
+- pg-boss: PostgreSQL-backed queue with good retry semantics; requires a persistent polling
+  process that adds unnecessary operational complexity at zero-user MVP stage — rejected
+- Redis + BullMQ: requires a Redis instance; rejected for single-developer constraint
+- Inngest: event-driven, excellent DX; smaller LLM training corpus; worth revisiting post-MVP
 
 ---
 
@@ -351,10 +368,10 @@ cloud-agnostic. The decision to start on Vercel does not foreclose AWS later.
 | ORM | Prisma | 5.x |
 | Auth | Clerk | latest |
 | File storage | Cloudflare R2 | S3-compatible SDK |
-| AI | Vercel AI SDK + OpenAI API | AI SDK 4.x / GPT-4o |
+| AI | Vercel AI SDK + Anthropic (Claude) | AI SDK 4.x / claude-haiku-4-5 default |
 | Email | Resend + React Email | latest |
 | SMS | Twilio Messaging API | latest |
-| Background jobs | pg-boss | 10.x |
+| Background jobs | Vercel Cron + `job_queue` table | — |
 | Testing (unit/integration) | Vitest | latest |
 | Testing (E2E) | Playwright | latest |
 | Hosting | Vercel | — |
@@ -382,10 +399,10 @@ cloud-agnostic. The decision to start on Vercel does not foreclose AWS later.
 - **Serverless cold starts (Neon):** Neon's serverless model introduces occasional cold-start
   latency after periods of inactivity. Acceptable for a B2B product; not acceptable if the
   product expands into high-frequency consumer-facing traffic patterns.
-- **pg-boss on serverless:** pg-boss requires a persistent connection to poll for jobs. On Vercel
-  serverless functions, this requires a long-running worker. Mitigation: Run the pg-boss worker
-  as a Vercel Cron Job that polls on a schedule, or use a lightweight persistent process on a
-  free-tier Fly.io instance for the worker only.
+- **Vercel Cron frequency floor:** Vercel Cron Jobs have a minimum interval of 1 minute on paid
+  plans. For the MVP's scheduled jobs (nightly GDPR purge, hourly stale-alert), this is entirely
+  sufficient. If sub-minute job triggering is needed in future, Inngest or a dedicated worker
+  replaces the cron trigger without changing the queue table.
 - **Clerk pricing at scale:** Clerk's per-MAU pricing becomes material at large scale. Acceptable
   at MVP; review at 500+ active organisations.
 
@@ -418,6 +435,16 @@ consent entity that is a first-class citizen in the schema, not a field on an ex
 A white-label platform's data model would constrain or prevent this entirely. Full architectural
 control is the correct choice for a product whose moat depends on going deeper than competitors,
 not faster than them.
+
+### Why Anthropic over OpenAI as the default AI provider
+
+The Lapam-ATS build pipeline is Anthropic-native end to end: research, specification, and
+building all run on Claude models. Selecting Anthropic as the default application AI provider
+means the models generating the codebase and the models serving features within it share the
+same capability envelope and context window characteristics. It also reduces vendor surface to
+one AI relationship for the initial build phase, simplifying DPA negotiation and support
+escalation. The Vercel AI SDK's provider-agnostic interface means this decision is reversible
+at any time — switching providers is a one-line config change, not a refactor.
 
 ### Why AI is scoped as it is
 
