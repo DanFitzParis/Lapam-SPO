@@ -535,7 +535,7 @@ model JobQueue {
   tenantId    String?   // null for system-wide jobs (e.g. global GDPR sweep)
   jobType     JobType
   payload     Json
-  status      JobStatus2 @default(PENDING)
+  status      QueueJobStatus @default(PENDING)
   attempts    Int       @default(0)
   maxAttempts Int       @default(3)
   runAfter    DateTime  @default(now())
@@ -548,8 +548,7 @@ model JobQueue {
   @@index([status, runAfter])  // used by cron job poller
 }
 
-// Avoid name collision with Job model's JobStatus
-enum JobStatus2 {
+enum QueueJobStatus {
   PENDING
   RUNNING
   DONE

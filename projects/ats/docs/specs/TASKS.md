@@ -265,6 +265,9 @@ inter-dependency can be executed in any order.
     PUBLISHED, `externalIndeedId` is set, and the response includes the Indeed job ID
   - Given a PUBLISHED job, When PATCH status to CLOSED, Then the Indeed API delist call is
     made and the job status becomes CLOSED
+- **Implementation note:** Indeed API access requires partner approval which may not be in
+  place at build time. Implement behind an interface and mock the Indeed calls. Validate API
+  access separately.
 - **Verifies:** `pnpm vitest run src/app/api/jobs/[jobId]/publish`
 
 ---
@@ -390,6 +393,9 @@ inter-dependency can be executed in any order.
   - Given a location with a stale alert, Then its card displays the amber stale alert badge
   - Given a location_manager, When they view the dashboard, Then only their assigned locations
     are visible
+- **Implementation note:** Vercel serverless functions have execution time limits that prevent
+  long-lived SSE connections. Use Edge Runtime for the SSE endpoint, or replace SSE with
+  10-second client-side polling.
 - **Verifies:** `pnpm playwright test tests/e2e/dashboard.spec.ts`
 
 ---
@@ -449,7 +455,7 @@ inter-dependency can be executed in any order.
 
 ### TASK-019: Application acknowledgement cron job
 
-- **Description:** Implement `POST /api/cron/stale-alert` and the acknowledgement worker.
+- **Description:** Implement `POST /api/cron/ack` and the acknowledgement worker.
   The cron handler reads `APPLICATION_ACK_SEND` jobs from `JobQueue` with status PENDING and
   `runAfter <= now`. For each: sends SMS or email acknowledgement to the candidate, creates a
   `Message` record, creates a `PipelineEvent` (APPLICATION_RECEIVED), marks the job DONE.
@@ -512,6 +518,8 @@ inter-dependency can be executed in any order.
   - Given an application with no PipelineEvent for 6 business days, When the cron runs, Then
     the assigned location manager receives an alert
   - Given a HIRED application, When the cron runs, Then no alert is generated for it
+- **Implementation note:** No Notification model exists in the schema. Use email-only for
+  stale alerts at MVP. Do not create an in-app notification system.
 - **Verifies:** `pnpm vitest run src/lib/jobs/stale-alert-worker.test.ts`
 
 ---
