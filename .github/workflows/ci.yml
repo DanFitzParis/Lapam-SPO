@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Type Check + Lint + Test + Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY_CI }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY_CI }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        working-directory: projects/ats
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        working-directory: projects/ats
+        run: npx prisma generate
+
+      - name: Type check
+        working-directory: projects/ats
+        run: npx tsc --noEmit
+
+      - name: Lint
+        working-directory: projects/ats
+        run: npx biome check .
+
+      - name: Unit tests
+        working-directory: projects/ats
+        run: pnpm vitest run
+
+      - name: Build
+        working-directory: projects/ats
+        run: pnpm build
+
+      - name: Install Playwright browsers
+        working-directory: projects/ats
+        run: npx playwright install --with-deps chromium
+        if: hashFiles('projects/ats/tests/e2e/**') != ''
+
+      - name: E2E tests
+        working-directory: projects/ats
+        run: npx playwright test
+        if: hashFiles('projects/ats/tests/e2e/**') != ''
+
+  auto-merge:
+    name: Auto-merge qualifying PRs
+    needs: check
+    runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      contains(github.event.pull_request.body, '## Risk') &&
+      !contains(github.event.pull_request.body, '**high**')
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Enable auto-merge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const riskMatch = body.match(/## Risk\s*\n\s*(low|medium|high)/i);
+            const risk = riskMatch ? riskMatch[1].toLowerCase() : 'unknown';
+
+            if (risk === 'low' || risk === 'medium') {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                merge_method: 'squash'
+              });
+              console.log(`Auto-merged PR #${context.payload.pull_request.number} (${risk} risk)`);
+            } else {
+              console.log(`Skipping auto-merge: risk is "${risk}"`);
+            }
