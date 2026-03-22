@@ -37,6 +37,7 @@ inter-dependency can be executed in any order.
   `src/app/layout.tsx`, `src/app/page.tsx`, `.env.example`, `README.md`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** low
 - **Acceptance criteria:**
   - Given the repo is cloned, When `pnpm install && pnpm dev` is run, Then the dev server starts
     on `localhost:3000` with no TypeScript errors
@@ -56,6 +57,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `prisma/schema.prisma`, `prisma/migrations/0001_initial/migration.sql`
 - **Modifies:** `package.json` (add prisma, @prisma/client)
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given DATABASE_URL is set to a Neon development branch, When `pnpm prisma migrate dev` is
     run, Then the migration succeeds with all tables created and no errors
@@ -76,6 +78,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/middleware.ts`, `src/lib/prisma.ts`, `src/lib/auth.ts`
 - **Modifies:** `src/app/layout.tsx` (wrap with ClerkProvider)
 - **Tier:** Medium
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a user is not signed in, When they navigate to `/dashboard`, Then they are redirected
     to `/sign-in`
@@ -100,6 +103,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/lib/rbac.ts`, `src/lib/rbac.test.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a user with role `location_manager`, When `requireRole('group_admin')` is called,
     Then it throws an Unauthorized error with status 403
@@ -126,6 +130,7 @@ inter-dependency can be executed in any order.
   `src/app/api/locations/[locationId]/route.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a group_admin session, When POST `/api/locations` with `{name: "Bristol", country: "GB"}`,
     Then a Location record is created with the correct tenantId and 201 is returned
@@ -148,6 +153,7 @@ inter-dependency can be executed in any order.
   `src/components/locations/locations-table.tsx`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given a group_admin, When they visit `/settings/locations`, Then all their locations are
     listed with name, country, and active status
@@ -169,6 +175,7 @@ inter-dependency can be executed in any order.
   `src/app/api/locations/[locationId]/assignments/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a group_admin, When they assign user X as location_manager for "Bristol", Then a
     `LocationAssignment` row is created and user X's dashboard shows only "Bristol"
@@ -192,6 +199,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/app/api/jobs/route.ts`, `src/app/api/jobs/[jobId]/route.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a location_manager for location A, When GET `/api/jobs`, Then only jobs for location A
     are returned
@@ -214,6 +222,7 @@ inter-dependency can be executed in any order.
   `src/lib/ai.ts` (Vercel AI SDK client setup with Anthropic provider)
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a valid session, When POST `/api/ai/job-description` with `{roleTitle: "Kitchen Porter"}`,
     Then a streaming text response is returned containing a job description
@@ -238,6 +247,7 @@ inter-dependency can be executed in any order.
   `src/components/jobs/ai-jd-button.tsx`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given the job create form, When the user types a role title and clicks "Generate with AI",
     Then the description field fills with streamed text and shows the amber AI draft label
@@ -260,6 +270,7 @@ inter-dependency can be executed in any order.
   `src/lib/indeed.ts`
 - **Modifies:** `src/app/api/jobs/[jobId]/route.ts` (add close logic to PATCH)
 - **Tier:** Medium
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a DRAFT job, When POST `/api/jobs/[jobId]/publish`, Then the job status becomes
     PUBLISHED, `externalIndeedId` is set, and the response includes the Indeed job ID
@@ -287,6 +298,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/lib/r2.ts`, `src/app/api/uploads/presign/route.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a valid session, When POST `/api/uploads/presign` with a valid payload, Then a
     presigned PUT URL and object key are returned, expiring in 15 minutes
@@ -312,6 +324,7 @@ inter-dependency can be executed in any order.
   `src/components/apply/gdpr-notice.tsx`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given a valid apply link, When a user visits on a 375px-wide viewport, Then the form
     renders as a single-column, 4-screen flow with no horizontal scroll
@@ -335,6 +348,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/app/api/public/jobs/[applyLinkToken]/apply/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a valid apply token and consentGiven: true, When POST to the endpoint, Then a
     Candidate, Application, and ConsentRecord are created atomically in one transaction
@@ -361,6 +375,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/app/api/dashboard/route.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a tenant with 3 locations, each with jobs at various stages, When group_admin calls
     GET `/api/dashboard`, Then all 3 locations are returned with correct stage counts
@@ -386,6 +401,7 @@ inter-dependency can be executed in any order.
   `src/app/api/dashboard/stream/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given a group_admin on the dashboard, When a new application is received for any location,
     Then the relevant location card updates its APPLIED count within 10 seconds without a
@@ -415,6 +431,7 @@ inter-dependency can be executed in any order.
   `src/app/api/applications/[applicationId]/stage/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a job with applications in various stages, When the page loads, Then candidates
     appear in the correct Kanban column
@@ -444,6 +461,7 @@ inter-dependency can be executed in any order.
   `src/emails/application-acknowledgement.tsx`
 - **Modifies:** `package.json` (add resend, @react-email/components, twilio)
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given valid Resend and Twilio credentials in env, When `sendEmail` is called with a valid
     address, Then an email is dispatched and a message ID is returned
@@ -465,6 +483,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/app/api/cron/ack/route.ts`, `src/lib/jobs/ack-worker.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a pending APPLICATION_ACK_SEND job, When the cron endpoint is called with the correct
     CRON_SECRET, Then the candidate receives an SMS/email, a Message record is created, and
@@ -492,6 +511,7 @@ inter-dependency can be executed in any order.
   `src/app/api/applications/[applicationId]/messages/route.ts`
 - **Modifies:** `src/app/(dashboard)/jobs/[jobId]/applications/[applicationId]/page.tsx`
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given the candidate detail page, When the operator clicks "AI Draft", Then the compose
     field is populated with a drafted message and the amber AI label appears
@@ -514,6 +534,7 @@ inter-dependency can be executed in any order.
   `src/lib/jobs/stale-alert-worker.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given an application with no PipelineEvent for 6 business days, When the cron runs, Then
     the assigned location manager receives an alert
@@ -539,6 +560,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/app/api/applications/[applicationId]/interview-slots/route.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a valid application, When POST with `{slots: [{proposedAt: "..."}]}`, Then
     InterviewSlot records are created and the candidate receives an SMS with the selection link
@@ -560,6 +582,7 @@ inter-dependency can be executed in any order.
   `src/app/api/public/interview-slots/[slotToken]/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given a valid slot token, When a candidate visits the page, Then proposed slots are shown
     as tappable cards with no login prompt
@@ -584,6 +607,7 @@ inter-dependency can be executed in any order.
   `src/lib/jobs/reminder-worker.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a confirmed interview 24 hours away, When the cron runs, Then the candidate and
     manager each receive a reminder and `reminderSentAt` is set
@@ -612,6 +636,7 @@ inter-dependency can be executed in any order.
   `src/lib/gbg.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a valid application at a GB location, When POST `/api/applications/[id]/rtw`, Then
     the candidate receives an SMS with the RTW link and the check status is PENDING
@@ -636,6 +661,7 @@ inter-dependency can be executed in any order.
   `src/components/rtw/share-code-form.tsx`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a valid RTW token, When the candidate visits on mobile, Then two check type options
     are displayed as large tappable cards with no login required
@@ -658,6 +684,7 @@ inter-dependency can be executed in any order.
 - **Creates:** `src/app/api/applications/[applicationId]/rtw/override/route.ts`
 - **Modifies:** `src/app/api/applications/[applicationId]/stage/route.ts`
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a UK application without a PASS RTW check, When PATCH stage to HIRED, Then 409 is
     returned with a clear message
@@ -686,6 +713,7 @@ inter-dependency can be executed in any order.
   `src/lib/jobs/gdpr-purge-worker.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a candidate whose consent expired 13 months ago with only REJECTED applications,
     When the cron runs, Then their personal data fields are nulled and an AuditLog entry is
@@ -712,6 +740,7 @@ inter-dependency can be executed in any order.
   `src/lib/jobs/dsar-worker.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a DSAR request, When the job is processed, Then a JSON file containing all candidate
     data is uploaded to R2 and the Group Admin receives an email with a presigned download link
@@ -737,6 +766,7 @@ inter-dependency can be executed in any order.
   `src/lib/jobs/reconsent-worker.ts`
 - **Modifies:** —
 - **Tier:** Small
+- **Risk:** high
 - **Acceptance criteria:**
   - Given a talent pool entry whose consent expires in 25 days, When the cron runs, Then the
     candidate receives a re-consent message
@@ -766,6 +796,7 @@ inter-dependency can be executed in any order.
   `src/app/api/public/offers/[acceptanceToken]/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given an application at OFFER stage, When POST `/api/applications/[id]/offer`, Then an
     Offer record is created and the candidate receives an SMS with the acceptance link
@@ -795,6 +826,7 @@ inter-dependency can be executed in any order.
   `src/app/api/public/jobs/[applyLinkToken]/apply/route.ts` (persist responses),
   `src/components/pipeline/candidate-card.tsx` (show responses + knockout badge)
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given a job with 2 knockout questions, When a candidate answers both unfavourably, Then
     their candidate card shows a knockout flag — they are NOT hidden and NOT auto-rejected
@@ -820,6 +852,7 @@ inter-dependency can be executed in any order.
   `src/app/api/applications/[applicationId]/close-hire/route.ts`
 - **Modifies:** `src/components/pipeline/candidate-card.tsx`
 - **Tier:** Small
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a HIRED candidate card, When "Close hire record" is tapped and "Re-hire eligible"
     is selected, Then a TalentPoolEntry and a TALENT_POOL ConsentRecord are created
@@ -846,6 +879,7 @@ inter-dependency can be executed in any order.
   `src/app/api/talent-pool/route.ts`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** medium
 - **Acceptance criteria:**
   - Given a talent pool with 20 entries, When the page loads, Then all entries are listed with
     tag badges and consent expiry dates visible
@@ -873,6 +907,7 @@ inter-dependency can be executed in any order.
   `src/components/pipeline/interview-prep.tsx`
 - **Modifies:** `src/app/(dashboard)/jobs/[jobId]/applications/[applicationId]/page.tsx`
 - **Tier:** Small
+- **Risk:** low
 - **Acceptance criteria:**
   - Given an open application, When the operator clicks "Suggest Questions", Then 5–8
     role-appropriate interview questions are returned and displayed as a checklist
@@ -901,6 +936,7 @@ inter-dependency can be executed in any order.
   `src/components/analytics/metrics-table.tsx`
 - **Modifies:** —
 - **Tier:** Medium
+- **Risk:** low
 - **Acceptance criteria:**
   - Given a tenant with 3 months of hire data, When GET `/api/analytics`, Then time-to-fill
     and conversion rates are returned for each location
