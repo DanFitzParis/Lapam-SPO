@@ -84,7 +84,7 @@ jobs:
         with:
           script: |
             const body = context.payload.pull_request.body || '';
-            const riskMatch = body.match(/## Risk\s*\n\s*(low|medium|high)/i);
+            const riskMatch = body.match(/## Risk\s*\n\s*\*{0,2}(low|medium|high)\*{0,2}/i);
             const risk = riskMatch ? riskMatch[1].toLowerCase() : 'unknown';
 
             if (risk === 'low' || risk === 'medium') {
