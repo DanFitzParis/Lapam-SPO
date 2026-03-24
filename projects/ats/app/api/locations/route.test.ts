@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 
 vi.mock('@/lib/auth', () => ({
   getTenantClient: vi.fn(),
+  getTenantId: vi.fn(),
 }));
 
 vi.mock('@/lib/rbac', () => ({
@@ -40,10 +41,11 @@ describe('/api/locations', () => {
 
   describe('POST', () => {
     it('should create location for group_admin', async () => {
-      const { getTenantClient } = await import('@/lib/auth');
+      const { getTenantClient, getTenantId } = await import('@/lib/auth');
       const { requireRole } = await import('@/lib/rbac');
 
       vi.mocked(requireRole).mockResolvedValue(undefined);
+      vi.mocked(getTenantId).mockResolvedValue('org_abc');
 
       const mockPrisma = {
         location: {
