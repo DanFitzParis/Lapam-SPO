@@ -29,7 +29,7 @@ export function createTenantClient(tenantId: string) {
   return prisma.$extends({
     query: {
       $allModels: {
-        async $allOperations({ model, operation, args, query }) {
+        async $allOperations({ model, operation, args, query }: { model?: string; operation: string; args: Record<string, any>; query: (args: any) => Promise<any> }) {
           if (!TENANT_SCOPED_MODELS.includes(model ?? '')) {
             return query(args);
           }

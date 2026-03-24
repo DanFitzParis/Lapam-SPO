@@ -12,7 +12,7 @@ export async function requireRole(requiredRole: Role): Promise<void> {
     });
   }
 
-  const userRole = sessionClaims?.metadata?.role as Role | undefined;
+  const userRole = (sessionClaims?.metadata as any)?.role as Role | undefined;
 
   if (!userRole) {
     throw new Error('Unauthorized: User has no role assigned', {
@@ -54,5 +54,5 @@ export async function getUserLocations(): Promise<string[]> {
 
 export async function getUserRole(): Promise<Role | null> {
   const { sessionClaims } = await auth();
-  return (sessionClaims?.metadata?.role as Role) || null;
+  return ((sessionClaims?.metadata as any)?.role as Role) || null;
 }
