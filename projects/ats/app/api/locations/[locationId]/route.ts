@@ -11,11 +11,12 @@ const updateLocationSchema = z.object({
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { locationId: string } }
+  { params }: { params: Promise<{ locationId: string }> }
 ) {
   try {
     await requireRole('group_admin');
     
+    const { locationId } = await params;
     const body = await request.json();
     const validated = updateLocationSchema.parse(body);
 
@@ -23,7 +24,7 @@ export async function PATCH(
     
     const location = await prisma.location.update({
       where: {
-        id: params.locationId,
+        id: locationId,
       },
       data: validated,
       select: {
