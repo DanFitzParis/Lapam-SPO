@@ -25,16 +25,28 @@ interface Application {
   }
 }
 
-export default function JobDetailPage({ params }: { params: { jobId: string } }) {
+export default function JobDetailPage({
+  params,
+}: {
+  params: Promise<{ jobId: string }>
+}) {
   const router = useRouter()
+  const [jobId, setJobId] = useState<string | null>(null)
   const [job, setJob] = useState<Job | null>(null)
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Unwrap params promise
   useEffect(() => {
+    params.then((p) => setJobId(p.jobId))
+  }, [params])
+
+  useEffect(() => {
+    if (!jobId) return
+
     async function fetchJob() {
       try {
-        const res = await fetch(`/api/jobs/${params.jobId}`)
+        const res = await fetch(`/api/jobs/${jobId}`)
         if (res.ok) {
           const data = await res.json()
           setJob(data)
@@ -46,7 +58,7 @@ export default function JobDetailPage({ params }: { params: { jobId: string } })
 
     async function fetchApplications() {
       try {
-        const res = await fetch(`/api/jobs/${params.jobId}/applications`)
+        const res = await fetch(`/api/jobs/${jobId}/applications`)
         if (res.ok) {
           const data = await res.json()
           setApplications(data)
@@ -60,7 +72,7 @@ export default function JobDetailPage({ params }: { params: { jobId: string } })
 
     fetchJob()
     fetchApplications()
-  }, [params.jobId])
+  }, [jobId])
 
   async function handleStageChange(applicationId: string, newStage: string) {
     const res = await fetch(`/api/applications/${applicationId}/stage`, {
@@ -79,7 +91,7 @@ export default function JobDetailPage({ params }: { params: { jobId: string } })
     )
   }
 
-  if (loading) {
+  if (loading || !jobId) {
     return (
       <div className="p-8">
         <p className="text-gray-500">Loading...</p>
