@@ -1,15 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from './route';
 import { NextRequest } from 'next/server';
+
+const mockJobFindUnique = vi.fn();
+const mockTransaction = vi.fn();
 
 vi.mock('@prisma/client', () => ({
   PrismaClient: vi.fn(() => ({
     job: {
-      findUnique: vi.fn(),
+      findUnique: mockJobFindUnique,
     },
-    $transaction: vi.fn(),
+    $transaction: mockTransaction,
   })),
 }));
+
+// Import after mock is set up
+const { POST } = await import('./route');
 
 describe('/api/public/jobs/[applyLinkToken]/apply', () => {
   beforeEach(() => {
@@ -17,17 +22,13 @@ describe('/api/public/jobs/[applyLinkToken]/apply', () => {
   });
 
   it('should create candidate, application, and consent record atomically', async () => {
-    const { PrismaClient } = await import('@prisma/client');
-    
-    const mockPrisma = new PrismaClient() as any;
-    
-    mockPrisma.job.findUnique.mockResolvedValue({
+    mockJobFindUnique.mockResolvedValue({
       id: 'job_1',
       tenantId: 'org_abc',
       status: 'PUBLISHED',
     });
 
-    mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+    mockTransaction.mockImplementation(async (callback: any) => {
       const mockTx = {
         candidate: {
           create: vi.fn().mockResolvedValue({ id: 'cand_1' }),
@@ -81,11 +82,7 @@ describe('/api/public/jobs/[applyLinkToken]/apply', () => {
   });
 
   it('should return 410 if job is closed', async () => {
-    const { PrismaClient } = await import('@prisma/client');
-    
-    const mockPrisma = new PrismaClient() as any;
-    
-    mockPrisma.job.findUnique.mockResolvedValue({
+    mockJobFindUnique.mockResolvedValue({
       id: 'job_1',
       tenantId: 'org_abc',
       status: 'CLOSED',
