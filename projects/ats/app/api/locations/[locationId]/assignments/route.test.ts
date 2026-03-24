@@ -35,7 +35,7 @@ describe('/api/locations/[locationId]/assignments', () => {
         body: JSON.stringify({ clerkUserId: 'user_123' }),
       });
 
-      const response = await POST(request, { params: { locationId: 'loc_1' } });
+      const response = await POST(request, { params: Promise.resolve({ locationId: 'loc_1' }) });
 
       expect(response.status).toBe(201);
     });
@@ -52,7 +52,7 @@ describe('/api/locations/[locationId]/assignments', () => {
         body: JSON.stringify({ clerkUserId: 'user_123' }),
       });
 
-      const response = await POST(request, { params: { locationId: 'loc_1' } });
+      const response = await POST(request, { params: Promise.resolve({ locationId: 'loc_1' }) });
 
       expect(response.status).toBe(403);
     });
