@@ -18,6 +18,7 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY_CI }}
       CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY_CI }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
     steps:
       - name: Checkout
