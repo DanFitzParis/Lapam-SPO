@@ -9,10 +9,11 @@ const assignmentSchema = z.object({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { locationId: string } }
+  { params }: { params: Promise<{ locationId: string }> }
 ) {
   try {
     await requireRole('group_admin');
+    const { locationId } = await params;
     
     const body = await request.json();
     const { clerkUserId } = assignmentSchema.parse(body);
@@ -21,7 +22,7 @@ export async function POST(
     
     await prisma.locationAssignment.create({
       data: {
-        locationId: params.locationId,
+        locationId,
         clerkUserId,
       },
     });
@@ -52,10 +53,11 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { locationId: string } }
+  { params }: { params: Promise<{ locationId: string }> }
 ) {
   try {
     await requireRole('group_admin');
+    const { locationId } = await params;
     
     const body = await request.json();
     const { clerkUserId } = assignmentSchema.parse(body);
@@ -65,7 +67,7 @@ export async function DELETE(
     await prisma.locationAssignment.delete({
       where: {
         locationId_clerkUserId: {
-          locationId: params.locationId,
+          locationId,
           clerkUserId,
         },
       },
