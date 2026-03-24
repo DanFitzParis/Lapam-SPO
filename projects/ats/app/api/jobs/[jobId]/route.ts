@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getTenantClient } from '@/lib/auth';
+import { delistJobFromIndeed } from '@/lib/indeed';
 
 const updateJobSchema = z.object({
   title: z.string().min(1).optional(),
@@ -70,7 +71,29 @@ export async function PATCH(
 
     const prisma = await getTenantClient();
 
-    // If closing, set closedAt
+    // Fetch current job state
+    const currentJob = await prisma.job.findUnique({
+      where: { id: jobId },
+      select: {
+        id: true,
+        status: true,
+        externalIndeedId: true,
+      },
+    });
+
+    if (!currentJob) {
+      return NextResponse.json(
+        { error: 'Job not found' },
+        { status: 404 }
+      );
+    }
+
+    // If closing a published job, delist from Indeed
+    if (validated.status === 'CLOSED' && currentJob.status === 'PUBLISHED' && currentJob.externalIndeedId) {
+      await delistJobFromIndeed(currentJob.externalIndeedId);
+    }
+
+    // Update job
     const data: any = { ...validated };
     if (validated.status === 'CLOSED') {
       data.closedAt = new Date();
