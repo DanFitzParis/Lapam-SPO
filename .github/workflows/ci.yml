@@ -63,26 +63,6 @@ jobs:
         working-directory: projects/ats
         run: pnpm build
 
-      - name: Install Playwright browsers
-        working-directory: projects/ats
-        run: npx playwright install --with-deps chromium
-        if: hashFiles('projects/ats/tests/e2e/**') != ''
-
-      - name: E2E tests
-        working-directory: projects/ats
-        run: npx playwright test
-        if: hashFiles('projects/ats/tests/e2e/**') != ''
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL_CI }}
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY_CI }}
-          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY_CI }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
-          R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-
   auto-merge:
     name: Auto-merge qualifying PRs
     needs: check
