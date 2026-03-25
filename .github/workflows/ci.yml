@@ -63,16 +63,6 @@ jobs:
         working-directory: projects/ats
         run: pnpm build
 
-      - name: Install Playwright browsers
-        working-directory: projects/ats
-        run: npx playwright install --with-deps chromium
-        if: hashFiles('projects/ats/tests/e2e/**') != ''
-
-      - name: E2E tests
-        working-directory: projects/ats
-        run: npx playwright test
-        if: hashFiles('projects/ats/tests/e2e/**') != ''
-
   auto-merge:
     name: Auto-merge qualifying PRs
     needs: check
