@@ -24,6 +24,11 @@ jobs:
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
       R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+      TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+      CRON_SECRET: ${{ secrets.CRON_SECRET }}
 
     steps:
       - name: Checkout
