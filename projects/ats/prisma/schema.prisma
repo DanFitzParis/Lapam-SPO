@@ -184,6 +184,7 @@ model Application {
   messages        Message[]
   screeningResponses ScreeningResponse[]
   rightToWorkCheck RightToWorkCheck?
+  rtwRequests     RtwRequest[]
   interviewSlots  InterviewSlot[]
   offer           Offer?
 
@@ -494,4 +495,16 @@ enum AuditEventType {
   OFFER_DECLINED
   CANDIDATE_HIRED
   CANDIDATE_REJECTED
+}
+
+model RtwRequest {
+  id              String   @id @default(cuid())
+  rtwToken        String   @unique @default(cuid())
+  applicationId   String
+  tenantId        String
+  createdAt       DateTime @default(now())
+
+  application     Application @relation(fields: [applicationId], references: [id])
+
+  @@index([tenantId])
 }
