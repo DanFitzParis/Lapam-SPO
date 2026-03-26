@@ -165,6 +165,7 @@ model Candidate {
 
 model Application {
   id              String   @id @default(cuid())
+  slotToken       String   @unique @default(cuid())
   tenantId        String
   jobId           String
   candidateId     String
@@ -255,6 +256,7 @@ enum ConsentType {
 
 model PipelineEvent {
   id              String   @id @default(cuid())
+  slotToken       String   @unique @default(cuid())
   applicationId   String
   tenantId        String
   actorUserId     String?
@@ -289,6 +291,7 @@ enum PipelineEventType {
 
 model Message {
   id              String   @id @default(cuid())
+  slotToken       String   @unique @default(cuid())
   tenantId        String
   applicationId   String
   direction       MessageDirection
@@ -356,6 +359,7 @@ enum RtwResult {
 
 model InterviewSlot {
   id              String   @id @default(cuid())
+  slotToken       String   @unique @default(cuid())
   applicationId   String
   tenantId        String
   proposedAt      DateTime
@@ -378,6 +382,7 @@ enum SlotStatus {
 
 model Offer {
   id              String   @id @default(cuid())
+  slotToken       String   @unique @default(cuid())
   applicationId   String   @unique
   tenantId        String
   letterDocumentKey String?
@@ -401,6 +406,7 @@ enum OfferStatus {
 
 model TalentPoolEntry {
   id              String   @id @default(cuid())
+  slotToken       String   @unique @default(cuid())
   tenantId        String
   candidateId     String
   originalRole    String
