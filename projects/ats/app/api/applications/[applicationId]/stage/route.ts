@@ -19,13 +19,16 @@ export async function PATCH(
     const prisma = await getTenantClient();
     const userId = await getCurrentUserId();
 
-    // Fetch current application
+    // Fetch current application with job location
     const application = await prisma.application.findUnique({
       where: { id: applicationId },
-      select: {
-        id: true,
-        stage: true,
-        tenantId: true,
+      include: {
+        job: {
+          include: {
+            location: true,
+          },
+        },
+        rightToWorkCheck: true,
       },
     });
 
@@ -34,6 +37,21 @@ export async function PATCH(
         { error: 'Application not found' },
         { status: 404 }
       );
+    }
+
+    // RTW gate for HIRED stage in GB locations
+    if (stage === 'HIRED' && application.job.location.country === 'GB') {
+      const hasValidRtw = application.rightToWorkCheck?.result === 'PASS';
+
+      if (!hasValidRtw) {
+        return NextResponse.json(
+          {
+            error: 'Right to work verification required',
+            message: 'Cannot move to HIRED stage without a passing right to work check for UK locations',
+          },
+          { status: 409 }
+        );
+      }
     }
 
     // Update stage and create pipeline event

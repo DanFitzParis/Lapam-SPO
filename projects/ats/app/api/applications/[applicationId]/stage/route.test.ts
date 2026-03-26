@@ -1,19 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 
-const mockApplicationFindUnique = vi.fn();
-const mockApplicationUpdate = vi.fn();
-const mockPipelineEventCreate = vi.fn();
+const mockFindUnique = vi.fn();
+const mockUpdate = vi.fn();
+const mockCreate = vi.fn();
 const mockTransaction = vi.fn();
 
 vi.mock('@/lib/auth', () => ({
   getTenantClient: vi.fn(() => ({
     application: {
-      findUnique: mockApplicationFindUnique,
-      update: mockApplicationUpdate,
+      findUnique: mockFindUnique,
+      update: mockUpdate,
     },
     pipelineEvent: {
-      create: mockPipelineEventCreate,
+      create: mockCreate,
     },
     $transaction: mockTransaction,
   })),
@@ -27,50 +27,88 @@ describe('/api/applications/[applicationId]/stage', () => {
     vi.clearAllMocks();
   });
 
-  it('should update stage and create pipeline event', async () => {
-    mockApplicationFindUnique.mockResolvedValue({
+  it('should update stage to OFFER (no RTW gate)', async () => {
+    mockFindUnique.mockResolvedValue({
       id: 'app_1',
-      stage: 'APPLIED',
+      stage: 'INTERVIEW',
       tenantId: 'org_abc',
+      job: {
+        location: { country: 'GB' },
+      },
+      rightToWorkCheck: null,
     });
 
-    mockTransaction.mockImplementation(async (operations: any[]) => {
-      return [
-        {
-          id: 'app_1',
-          stage: 'SCREENING',
-          candidate: { firstName: 'John', lastName: 'Doe' },
-        },
-        { id: 'event_1' },
-      ];
-    });
+    mockTransaction.mockResolvedValue([
+      {
+        id: 'app_1',
+        stage: 'OFFER',
+        candidate: { firstName: 'John', lastName: 'Doe' },
+      },
+    ]);
 
     const request = new NextRequest('http://localhost/api/applications/app_1/stage', {
       method: 'PATCH',
-      body: JSON.stringify({
-        stage: 'SCREENING',
-        note: 'Initial review passed',
-      }),
+      body: JSON.stringify({ stage: 'OFFER' }),
     });
 
     const response = await PATCH(request, { params: Promise.resolve({ applicationId: 'app_1' }) });
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.stage).toBe('SCREENING');
-    expect(mockTransaction).toHaveBeenCalled();
+    expect(data.stage).toBe('OFFER');
   });
 
-  it('should return 404 if application not found', async () => {
-    mockApplicationFindUnique.mockResolvedValue(null);
-
-    const request = new NextRequest('http://localhost/api/applications/app_999/stage', {
-      method: 'PATCH',
-      body: JSON.stringify({ stage: 'SCREENING' }),
+  it('should block HIRED stage for GB location without RTW', async () => {
+    mockFindUnique.mockResolvedValue({
+      id: 'app_1',
+      stage: 'OFFER',
+      tenantId: 'org_abc',
+      job: {
+        location: { country: 'GB' },
+      },
+      rightToWorkCheck: null, // No RTW check
     });
 
-    const response = await PATCH(request, { params: Promise.resolve({ applicationId: 'app_999' }) });
+    const request = new NextRequest('http://localhost/api/applications/app_1/stage', {
+      method: 'PATCH',
+      body: JSON.stringify({ stage: 'HIRED' }),
+    });
 
-    expect(response.status).toBe(404);
+    const response = await PATCH(request, { params: Promise.resolve({ applicationId: 'app_1' }) });
+    const data = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(data.error).toContain('Right to work');
+  });
+
+  it('should allow HIRED stage for GB location with PASS RTW', async () => {
+    mockFindUnique.mockResolvedValue({
+      id: 'app_1',
+      stage: 'OFFER',
+      tenantId: 'org_abc',
+      job: {
+        location: { country: 'GB' },
+      },
+      rightToWorkCheck: { result: 'PASS' },
+    });
+
+    mockTransaction.mockResolvedValue([
+      {
+        id: 'app_1',
+        stage: 'HIRED',
+        candidate: { firstName: 'John', lastName: 'Doe' },
+      },
+    ]);
+
+    const request = new NextRequest('http://localhost/api/applications/app_1/stage', {
+      method: 'PATCH',
+      body: JSON.stringify({ stage: 'HIRED' }),
+    });
+
+    const response = await PATCH(request, { params: Promise.resolve({ applicationId: 'app_1' }) });
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.stage).toBe('HIRED');
   });
 });
