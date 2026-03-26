@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Multi-location hospitality hiring platform with pipeline visibility, mobile-first candidate engagement, and seasonal talent pool management. Built for UK and EU operators.">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Lapam-ATS — Hospitality Hiring, Built for Multi-Location Groups">
+  <meta property="og:description" content="Stop finding out about staffing crises when a manager calls you. See which locations need help before they become a problem.">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lapam-ATS — Hospitality Hiring, Built for Multi-Location Groups">
+  <meta name="twitter:description" content="Multi-location pipeline visibility, seasonal talent pool management, and compliance depth at mid-market pricing.">
+
+  <title>Lapam-ATS — Hospitality Hiring, Built for Multi-Location Groups</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" content="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Montserrat from Google Fonts (brand-locked font) -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&display=swap');
+
+    :root {
+      --brand-400: #1D122C;
+      --brand-300: #301E4A;
+      --brand-200: #D6D3FF;
+      --brand-100: #F2EEF9;
+      --accent: #18B6C3;
+      --neutral-600: #23252E;
+      --neutral-500: #2D2F3A;
+      --neutral-400: #3D424F;
+      --neutral-300: #585F7B;
+      --neutral-200: #9BA2C0;
+      --neutral-100: #DADBE7;
+      --neutral-50: #F3F2F5;
+      --white: #FFFFFF;
+      --error: #DA242D;
+      --warning: #FFAC3D;
+      --success: #278740;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--neutral-500);
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #F2EEF9 0%, #ffffff 100%);
+    }
+
+    .dark-section {
+      background: var(--brand-400);
+      color: var(--white);
+    }
+
+    .section-label {
+      display: inline-block;
+      border: 1px solid var(--neutral-100);
+      border-radius: 999px;
+      padding: 0.375rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--neutral-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--brand-300);
+      color: var(--white);
+      padding: 0.875rem 2rem;
+      border-radius: 999px;
+      font-weight: 700;
+      display: inline-block;
+      text-decoration: none;
+      transition: background 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-400);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--brand-300);
+      border: 2px solid var(--brand-300);
+      padding: 0.875rem 2rem;
+      border-radius: 999px;
+      font-weight: 700;
+      display: inline-block;
+      text-decoration: none;
+      transition: all 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .btn-secondary:hover {
+      background: var(--brand-100);
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--neutral-100);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: box-shadow 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 8px 24px rgba(29, 18, 44, 0.08);
+    }
+
+    .icon-box {
+      background: var(--brand-100);
+      color: var(--brand-300);
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 240ms cubic-bezier(0.2, 0, 0, 1) forwards;
+    }
+
+    .delay-100 { animation-delay: 100ms; opacity: 0; }
+    .delay-200 { animation-delay: 200ms; opacity: 0; }
+    .delay-300 { animation-delay: 300ms; opacity: 0; }
+  </style>
+
+  <!-- Frontmatter (for project tracking) -->
+  <!-- title: Lapam-ATS Landing Page -->
+  <!-- type: marketing -->
+  <!-- agent: marketing -->
+  <!-- status: draft -->
+  <!-- version: 1.0 -->
+  <!-- created: 2026-03-26 -->
+  <!-- parent: product-marketing-context.md -->
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient py-20 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div class="animate-fade-in-up">
+        <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+          Stop finding out about staffing <span class="italic font-normal" style="color: var(--brand-300);">crises</span>
+        </h1>
+        <p class="text-xl text-neutral-400 mb-8 leading-relaxed">
+          See which locations have hiring problems before they become service failures. Multi-location pipeline visibility, seasonal talent pool management, and compliance depth — at pricing that doesn't require board approval.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#" class="btn-primary text-center">Get Early Access</a>
+          <a href="#" class="btn-secondary text-center">Watch Demo</a>
+        </div>
+      </div>
+      <div class="animate-fade-in-up delay-100">
+        <!-- Placeholder: Product screenshot showing multi-location dashboard with pipeline stages -->
+        <div style="background: linear-gradient(135deg, var(--brand-200) 0%, var(--accent) 100%); height: 400px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 700; text-align: center; padding: 2rem;">
+          <!-- Multi-location dashboard screenshot: 8 location cards showing pipeline stages (Applied, Screening, Interview, Offer, Hired) with visual alerts on stalled locations -->
+          Dashboard Preview
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pain Points Section -->
+  <section class="py-20 px-6" style="background: var(--neutral-50);">
+    <div class="max-w-5xl mx-auto text-center mb-16">
+      <span class="section-label">The Problem</span>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Your hiring process is <span class="italic font-normal" style="color: var(--brand-300);">invisible</span>
+      </h2>
+      <p class="text-xl text-neutral-400 max-w-3xl mx-auto">
+        You're managing 5, 10, 20 locations — and you have no idea which ones have staffing crises until a manager calls you in panic. The informal stack fails when you scale.
+      </p>
+    </div>
+
+    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+      <div class="feature-card animate-fade-in-up">
+        <div class="icon-box">
+          <i class="fas fa-eye-slash"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">No visibility across locations</h3>
+        <p class="text-neutral-400 leading-relaxed">
+          You can't see which locations have open roles, how many applications are in progress, or which pipelines are stalled — until someone calls you. No dashboard. No early warning. Decisions are reactive.
+        </p>
+      </div>
+
+      <div class="feature-card animate-fade-in-up delay-100">
+        <div class="icon-box">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Candidates take another job first</h3>
+        <p class="text-neutral-400 leading-relaxed">
+          Hospitality candidates apply to 4–6 jobs on mobile within an hour. If you take 2–3 days to respond because applications are stuck in email, they've already accepted another offer. Speed wins.
+        </p>
+      </div>
+
+      <div class="feature-card animate-fade-in-up delay-200">
+        <div class="icon-box">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4">Compliance audit risk</h3>
+        <p class="text-neutral-400 leading-relaxed">
+          GDPR consent not captured. Right-to-work checks on paper with no audit trail. Spreadsheets and WhatsApp groups can't survive a compliance audit. Fines: £45K–£60K per illegal worker.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution Section -->
+  <section class="py-20 px-6 bg-white">
+    <div class="max-w-5xl mx-auto text-center mb-16">
+      <span class="section-label">The Solution</span>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Built for <span class="italic font-normal" style="color: var(--brand-300);">multi-location</span> hospitality groups
+      </h2>
+      <p class="text-xl text-neutral-400 max-w-3xl mx-auto">
+        Lapam-ATS gives you the multi-location visibility and compliance depth of enterprise platforms — at mid-market pricing. Know which locations need help before they become a problem.
+      </p>
+    </div>
+
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+      <div>
+        <!-- Placeholder: Screenshot of pipeline dashboard showing real-time updates -->
+        <div style="background: linear-gradient(135deg, var(--brand-400) 0%, var(--brand-300) 100%); height: 400px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 700; text-align: center; padding: 2rem;">
+          <!-- Real-time pipeline dashboard: location cards with stage counts, visual alerts, "5 days since last activity" warning badge -->
+          Pipeline Dashboard
+        </div>
+      </div>
+      <div>
+        <h3 class="text-3xl font-bold mb-6">One screen. Every location. Real-time.</h3>
+        <p class="text-lg text-neutral-400 mb-6 leading-relaxed">
+          See open roles, application counts per stage, and days since last activity across all locations on a single dashboard. Visual alerts on stalled pipelines. Location Managers see only their sites; Group Admins see everything.
+        </p>
+        <p class="text-lg text-neutral-400 leading-relaxed">
+          No more Monday morning phone calls to eight different GMs. No more discovering a staffing crisis when a manager rings you at 9pm on Saturday.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features Section -->
+  <section class="py-20 px-6" style="background: var(--brand-100);">
+    <div class="max-w-5xl mx-auto text-center mb-16">
+      <span class="section-label">Key Features</span>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        The features that win you <span class="italic font-normal" style="color: var(--brand-300);">hires</span>
+      </h2>
+    </div>
+
+    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+      <div class="feature-card">
+        <div class="icon-box">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Seasonal Talent Pool CRM</h3>
+        <p class="text-neutral-400">
+          Your best seasonal workers from last year? They're in the system. Send a batch re-engagement message in February. Hire 60% of your summer roster before touching Indeed.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">No-Login Mobile Application</h3>
+        <p class="text-neutral-400">
+          Candidates apply in 3 minutes on the bus. No account. No CV upload. No "we'll be in touch" — they get a response in 2 minutes while they still care.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">UK Right-to-Work Verification</h3>
+        <p class="text-neutral-400">
+          No more chasing passports at 10pm the night before a trial shift. Digital verification, timestamped records, audit-ready before day one. Fines avoided: £45K–£60K per worker.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Automated Acknowledgement</h3>
+        <p class="text-neutral-400">
+          Candidate applies at 2pm. They get a message by 2:02pm. Not "we'll be in touch" — actual next steps. You keep them warm before they ghost you.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">GDPR Compliance Infrastructure</h3>
+        <p class="text-neutral-400">
+          When someone requests their data, you click one button. When consent expires, it deletes automatically. Your WhatsApp-and-spreadsheet stack cannot survive an audit. This can.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon-box">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-3">Hiring Analytics</h3>
+        <p class="text-neutral-400">
+          Which location takes 3 weeks to fill a role? Which one does it in 5 days? Where do your best hires come from? You'll know — because the dashboard tells you.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats/Social Proof Section -->
+  <section class="dark-section py-20 px-6" style="position: relative; overflow: hidden;">
+    <!-- Decorative geometric shapes -->
+    <div style="position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; border-radius: 50%; background: var(--brand-300); opacity: 0.15;"></div>
+    <div style="position: absolute; bottom: -80px; left: -80px; width: 280px; height: 280px; border-radius: 50%; background: var(--brand-200); opacity: 0.1;"></div>
+    
+    <div class="max-w-6xl mx-auto" style="position: relative; z-index: 1;">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">
+          Built for the hospitality <span class="italic font-normal" style="color: var(--brand-200);">reality</span>
+        </h2>
+        <p class="text-xl" style="color: rgba(255,255,255,0.88);">
+          Turnover is 70–80% annually in hospitality. Every departure costs >£5,000. An ATS that reduces time-to-fill has immediate ROI.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-5xl font-bold mb-2" style="color: var(--accent);">70–80%</div>
+          <div class="text-lg" style="color: rgba(255,255,255,0.88);">Annual turnover in hospitality (US BLS — highest of any sector)</div>
+        </div>
+        <div>
+          <div class="text-5xl font-bold mb-2" style="color: var(--accent);">>£5K</div>
+          <div class="text-lg" style="color: rgba(255,255,255,0.88);">Cost per departure (recruiting, onboarding, lost productivity)</div>
+        </div>
+        <div>
+          <div class="text-5xl font-bold mb-2" style="color: var(--accent);">80%</div>
+          <div class="text-lg" style="color: rgba(255,255,255,0.88);">Of hospitality job seekers conduct entire search on mobile</div>
+        </div>
+        <div>
+          <div class="text-5xl font-bold mb-2" style="color: var(--accent);">Hours</div>
+          <div class="text-lg" style="color: rgba(255,255,255,0.88);">Candidate engagement window before they take another job</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Placeholder Section -->
+  <section class="py-20 px-6" style="background: var(--neutral-50);">
+    <div class="max-w-5xl mx-auto text-center mb-16">
+      <span class="section-label">Trusted By</span>
+      <h2 class="text-4xl font-bold mb-8">
+        Hospitality operators across the UK and <span class="italic font-normal" style="color: var(--brand-300);">Europe</span>
+      </h2>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white border border-neutral-100 rounded-2xl p-12 text-center">
+        <div class="text-6xl mb-6" style="color: var(--brand-200);">"</div>
+        <p class="text-2xl italic mb-8 leading-relaxed" style="color: var(--neutral-500);">
+          I spent three weeks last March manually ringing through a spreadsheet of 200 people I hired two years ago to find out who was available. Now I send one batch message and arrive at March with a partially filled roster.
+        </p>
+        <div class="font-bold text-lg" style="color: var(--brand-300);">Claire Thompson</div>
+        <div class="text-neutral-400">Head of HR, Coastal Hotel Group (6 properties)</div>
+      </div>
+
+      <!-- Logo Row Placeholder -->
+      <div class="mt-16 flex flex-wrap justify-center items-center gap-12">
+        <!-- Placeholder: Greyscale client logos on white background -->
+        <div style="width: 140px; height: 60px; background: var(--neutral-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--neutral-300); font-weight: 700; font-size: 0.875rem;">Client Logo</div>
+        <div style="width: 140px; height: 60px; background: var(--neutral-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--neutral-300); font-weight: 700; font-size: 0.875rem;">Client Logo</div>
+        <div style="width: 140px; height: 60px; background: var(--neutral-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--neutral-300); font-weight: 700; font-size: 0.875rem;">Client Logo</div>
+        <div style="width: 140px; height: 60px; background: var(--neutral-100); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--neutral-300); font-weight: 700; font-size: 0.875rem;">Client Logo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="py-20 px-6 bg-white">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">
+        Know which locations need help before they become a <span class="italic font-normal" style="color: var(--brand-300);">problem</span>
+      </h2>
+      <p class="text-xl text-neutral-400 mb-10 max-w-2xl mx-auto">
+        Join the early access programme. UK operators hiring across 5+ locations get priority.
+      </p>
+      <a href="#" class="btn-primary text-lg px-12 py-4">Get Early Access</a>
+      <p class="text-sm text-neutral-300 mt-6">
+        No credit card required · UK launch: Q2 2026 · EU expansion: Q3 2026
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="dark-section py-12 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+      <div>
+        <div class="text-2xl font-bold mb-4" style="color: var(--white);">Lapam</div>
+        <p style="color: rgba(255,255,255,0.7);">
+          Intelligent Hospitality
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold mb-4" style="color: var(--white);">Product</h3>
+        <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
+          <li><a href="#" class="hover:text-white transition">Features</a></li>
+          <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+          <li><a href="#" class="hover:text-white transition">Demo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold mb-4" style="color: var(--white);">Company</h3>
+        <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
+          <li><a href="#" class="hover:text-white transition">About</a></li>
+          <li><a href="#" class="hover:text-white transition">Careers</a></li>
+          <li><a href="#" class="hover:text-white transition">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold mb-4" style="color: var(--white);">Resources</h3>
+        <ul class="space-y-2" style="color: rgba(255,255,255,0.7);">
+          <li><a href="#" class="hover:text-white transition">Documentation</a></li>
+          <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-6xl mx-auto mt-12 pt-8 border-t border-neutral-600 text-center" style="color: rgba(255,255,255,0.5);">
+      © 2026 Lapam. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+</html>
