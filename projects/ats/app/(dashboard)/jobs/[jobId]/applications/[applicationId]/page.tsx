@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { MessageCompose } from "@/components/pipeline/message-compose"
 import { MessageThread } from "@/components/pipeline/message-thread"
+import { InterviewQuestions } from "@/components/pipeline/interview-questions"
 
 interface Application {
   id: string
@@ -14,6 +15,7 @@ interface Application {
   }
   job: {
     title: string
+    locationType?: string
   }
 }
 
@@ -59,7 +61,7 @@ export default function ApplicationDetailPage({
           id: applicationId!,
           stage: 'SCREENING',
           candidate: { firstName: 'John', lastName: 'Doe' },
-          job: { title: 'Head Chef' },
+          job: { title: 'Head Chef', locationType: 'RESTAURANT' },
         })
 
         // Fetch messages
@@ -113,23 +115,33 @@ export default function ApplicationDetailPage({
         <p className="text-sm text-gray-500">Stage: {application.stage}</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div>
-          <h2 className="text-lg font-semibold mb-3">Send Message</h2>
-          <MessageCompose
-            applicationId={applicationId}
-            candidateName={application.candidate.firstName}
-            jobTitle={application.job.title}
-            stage={application.stage}
-            onMessageSent={handleMessageSent}
-          />
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Send Message</h2>
+            <MessageCompose
+              applicationId={applicationId}
+              candidateName={application.candidate.firstName}
+              jobTitle={application.job.title}
+              stage={application.stage}
+              onMessageSent={handleMessageSent}
+            />
+          </div>
+
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Message History</h2>
+            <div className="border border-gray-200 rounded-lg p-4">
+              <MessageThread messages={messages} />
+            </div>
+          </div>
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-3">Message History</h2>
-          <div className="border border-gray-200 rounded-lg p-4">
-            <MessageThread messages={messages} />
-          </div>
+          <h2 className="text-lg font-semibold mb-3">Interview Prep</h2>
+          <InterviewQuestions
+            roleTitle={application.job.title}
+            locationType={application.job.locationType}
+          />
         </div>
       </div>
     </div>
