@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { CloseHireSheet } from "./close-hire-sheet"
 
 interface ScreeningResponse {
   question: string
@@ -19,6 +20,7 @@ interface ScreeningResponse {
 interface CandidateCardProps {
   applicationId: string
   candidateName: string
+  jobTitle: string
   appliedAt: Date
   availabilityType: string
   currentStage: string
@@ -26,11 +28,13 @@ interface CandidateCardProps {
   screeningResponses?: ScreeningResponse[]
   isKnockoutFlagged?: boolean
   onStageChange: (applicationId: string, newStage: string) => Promise<void>
+  onCloseHire?: () => void
 }
 
 export function CandidateCard({
   applicationId,
   candidateName,
+  jobTitle,
   appliedAt,
   availabilityType,
   currentStage,
@@ -38,10 +42,12 @@ export function CandidateCard({
   screeningResponses = [],
   isKnockoutFlagged = false,
   onStageChange,
+  onCloseHire,
 }: CandidateCardProps) {
   const [selectedStage, setSelectedStage] = useState(currentStage)
   const [showConfirm, setShowConfirm] = useState(false)
   const [showScreening, setShowScreening] = useState(false)
+  const [showCloseHire, setShowCloseHire] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const timeSinceApplied = Math.floor(
@@ -72,6 +78,10 @@ export function CandidateCard({
     } finally {
       setLoading(false)
     }
+  }
+
+  function handleCloseHireSuccess() {
+    onCloseHire?.()
   }
 
   return (
@@ -119,6 +129,23 @@ export function CandidateCard({
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {currentStage === 'HIRED' && (
+        <div className="border-t pt-3">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => setShowCloseHire(true)}
+            className="w-full"
+          >
+            Close Hire Record
+          </Button>
+          <p className="text-xs text-gray-500 mt-1 text-center">
+            Add to talent pool for future roles
+          </p>
         </div>
       )}
 
@@ -174,6 +201,16 @@ export function CandidateCard({
             <SelectItem value="WITHDRAWN">Withdrawn</SelectItem>
           </SelectContent>
         </Select>
+      )}
+
+      {showCloseHire && (
+        <CloseHireSheet
+          applicationId={applicationId}
+          candidateName={candidateName}
+          jobTitle={jobTitle}
+          onClose={() => setShowCloseHire(false)}
+          onSuccess={handleCloseHireSuccess}
+        />
       )}
     </div>
   )
