@@ -10,6 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+interface ScreeningResponse {
+  question: string
+  response: string
+  isKnockout: boolean
+}
+
 interface CandidateCardProps {
   applicationId: string
   candidateName: string
@@ -17,6 +23,8 @@ interface CandidateCardProps {
   availabilityType: string
   currentStage: string
   isUkLocation?: boolean
+  screeningResponses?: ScreeningResponse[]
+  isKnockoutFlagged?: boolean
   onStageChange: (applicationId: string, newStage: string) => Promise<void>
 }
 
@@ -27,10 +35,13 @@ export function CandidateCard({
   availabilityType,
   currentStage,
   isUkLocation = false,
+  screeningResponses = [],
+  isKnockoutFlagged = false,
   onStageChange,
 }: CandidateCardProps) {
   const [selectedStage, setSelectedStage] = useState(currentStage)
   const [showConfirm, setShowConfirm] = useState(false)
+  const [showScreening, setShowScreening] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const timeSinceApplied = Math.floor(
@@ -67,7 +78,14 @@ export function CandidateCard({
     <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
       <div className="flex items-start justify-between">
         <div>
-          <h4 className="font-medium text-gray-900">{candidateName}</h4>
+          <div className="flex items-center gap-2">
+            <h4 className="font-medium text-gray-900">{candidateName}</h4>
+            {isKnockoutFlagged && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                ⚠️ Knockout
+              </span>
+            )}
+          </div>
           <p className="text-xs text-gray-500">
             Applied {timeSinceApplied === 0 ? 'today' : `${timeSinceApplied}d ago`}
           </p>
@@ -77,40 +95,52 @@ export function CandidateCard({
         </span>
       </div>
 
-      {currentStage === 'OFFER' && isUkLocation && (
-        <div className="p-2 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800">
-          ⚠️ RTW check required before hire
+      {screeningResponses.length > 0 && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowScreening(!showScreening)}
+            className="text-sm text-blue-600 hover:text-blue-700 underline"
+          >
+            {showScreening ? 'Hide' : 'Show'} screening responses ({screeningResponses.length})
+          </button>
+          {showScreening && (
+            <div className="mt-2 space-y-2 bg-gray-50 rounded p-3">
+              {screeningResponses.map((sr, idx) => (
+                <div key={idx} className="text-sm">
+                  <p className="font-medium text-gray-700 flex items-center gap-1">
+                    {sr.question}
+                    {sr.isKnockout && (
+                      <span className="text-orange-600 text-xs">(knockout)</span>
+                    )}
+                  </p>
+                  <p className="text-gray-600 ml-2">{sr.response}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
-      <Select value={selectedStage} onValueChange={handleStageChange} disabled={loading}>
-        <SelectTrigger className="w-full text-sm">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="APPLIED">Applied</SelectItem>
-          <SelectItem value="SCREENING">Screening</SelectItem>
-          <SelectItem value="INTERVIEW">Interview</SelectItem>
-          <SelectItem value="OFFER">Offer</SelectItem>
-          <SelectItem value="HIRED">Hired</SelectItem>
-          <SelectItem value="REJECTED">Rejected</SelectItem>
-          <SelectItem value="WITHDRAWN">Withdrawn</SelectItem>
-        </SelectContent>
-      </Select>
+      {currentStage === 'OFFER' && isUkLocation && (
+        <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
+          ⚠️ UK location — right to work check required before HIRED
+        </div>
+      )}
 
-      {showConfirm && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded space-y-2">
-          <p className="text-sm text-red-800">
-            Are you sure you want to reject this candidate?
+      {showConfirm ? (
+        <div className="space-y-2 border-t pt-3">
+          <p className="text-sm text-gray-600">
+            Are you sure you want to reject this application?
           </p>
           <div className="flex gap-2">
             <Button
               size="sm"
-              className="bg-red-600 text-white hover:bg-red-700"
-              onClick={() => performStageChange('REJECTED')}
+              variant="default"
+              onClick={() => performStageChange(selectedStage)}
               disabled={loading}
             >
-              Confirm Reject
+              {loading ? 'Rejecting...' : 'Yes, Reject'}
             </Button>
             <Button
               size="sm"
@@ -119,11 +149,31 @@ export function CandidateCard({
                 setShowConfirm(false)
                 setSelectedStage(currentStage)
               }}
+              disabled={loading}
             >
               Cancel
             </Button>
           </div>
         </div>
+      ) : (
+        <Select
+          value={selectedStage}
+          onValueChange={handleStageChange}
+          disabled={loading}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="APPLIED">Applied</SelectItem>
+            <SelectItem value="SCREENING">Screening</SelectItem>
+            <SelectItem value="INTERVIEW">Interview</SelectItem>
+            <SelectItem value="OFFER">Offer</SelectItem>
+            <SelectItem value="HIRED">Hired</SelectItem>
+            <SelectItem value="REJECTED">Rejected</SelectItem>
+            <SelectItem value="WITHDRAWN">Withdrawn</SelectItem>
+          </SelectContent>
+        </Select>
       )}
     </div>
   )
