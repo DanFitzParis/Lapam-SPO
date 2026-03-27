@@ -109,6 +109,17 @@ export async function POST(
       });
 
       // Enqueue acknowledgement job
+      // Create screening responses if provided
+      if (data.screeningResponses && data.screeningResponses.length > 0) {
+        await tx.screeningResponse.createMany({
+          data: data.screeningResponses.map((sr) => ({
+            applicationId: application.id,
+            questionId: sr.questionId,
+            response: sr.response,
+          })),
+        });
+      }
+
       await tx.jobQueue.create({
         data: {
           tenantId: job.tenantId,

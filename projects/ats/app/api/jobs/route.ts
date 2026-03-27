@@ -3,12 +3,21 @@ import { z } from 'zod';
 import { getTenantClient, getCurrentUserId, getTenantId } from '@/lib/auth';
 import { getUserRole, getUserLocations } from '@/lib/rbac';
 
+const screeningQuestionSchema = z.object({
+  question: z.string().min(1),
+  type: z.enum(['FREE_TEXT', 'YES_NO', 'SINGLE_CHOICE']),
+  options: z.array(z.string()),
+  isKnockout: z.boolean(),
+  order: z.number(),
+});
+
 const createJobSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   locationId: z.string(),
   locationType: z.enum(['RESTAURANT', 'HOTEL', 'BAR', 'EVENTS', 'OTHER']).optional(),
   employmentType: z.enum(['FULL_TIME', 'PART_TIME', 'SEASONAL', 'ZERO_HOURS', 'FLEXIBLE']).default('FULL_TIME'),
+  screeningQuestions: z.array(screeningQuestionSchema).max(5).optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -97,6 +106,17 @@ export async function POST(request: NextRequest) {
         location: {
           connect: { id: validated.locationId },
         },
+        screeningQuestions: validated.screeningQuestions
+          ? {
+              create: validated.screeningQuestions.map((q) => ({
+                question: q.question,
+                type: q.type,
+                options: q.options,
+                isKnockout: q.isKnockout,
+                order: q.order,
+              })),
+            }
+          : undefined,
       },
       select: {
         id: true,

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AiJdButton } from "./ai-jd-button"
+import { ScreeningQuestionsBuilder, ScreeningQuestion } from "./screening-questions-builder"
 
 interface JobFormProps {
   jobId?: string
@@ -16,6 +17,7 @@ interface JobFormProps {
     locationId: string
     locationType?: string
     employmentType: string
+    screeningQuestions?: ScreeningQuestion[]
   }
 }
 
@@ -29,6 +31,9 @@ export function JobForm({ jobId, initialData }: JobFormProps) {
   const [locationId, setLocationId] = useState(initialData?.locationId || "")
   const [locationType, setLocationType] = useState(initialData?.locationType || "")
   const [employmentType, setEmploymentType] = useState(initialData?.employmentType || "FULL_TIME")
+  const [screeningQuestions, setScreeningQuestions] = useState<ScreeningQuestion[]>(
+    initialData?.screeningQuestions || []
+  )
   const [aiDrafted, setAiDrafted] = useState(false)
 
   useEffect(() => {
@@ -71,6 +76,7 @@ export function JobForm({ jobId, initialData }: JobFormProps) {
           locationId,
           locationType: locationType || undefined,
           employmentType,
+          screeningQuestions,
         }),
       })
 
@@ -170,6 +176,11 @@ export function JobForm({ jobId, initialData }: JobFormProps) {
           </p>
         )}
       </div>
+
+      <ScreeningQuestionsBuilder
+        questions={screeningQuestions}
+        onChange={setScreeningQuestions}
+      />
 
       <div className="flex gap-2">
         <Button type="submit" disabled={loading || !title || !locationId}>
