@@ -23,6 +23,9 @@ interface Application {
     firstName: string
     lastName: string
   }
+  job: {
+    title: string
+  }
 }
 
 export default function JobDetailPage({

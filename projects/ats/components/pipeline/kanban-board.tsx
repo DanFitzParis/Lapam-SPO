@@ -11,6 +11,9 @@ interface Application {
     firstName: string
     lastName: string
   }
+  job: {
+    title: string
+  }
 }
 
 interface KanbanBoardProps {
@@ -44,6 +47,7 @@ export function KanbanBoard({ applications, isUkLocation = false, onStageChange 
                   key={app.id}
                   applicationId={app.id}
                   candidateName={`${app.candidate.firstName} ${app.candidate.lastName}`}
+                  jobTitle={app.job.title}
                   appliedAt={new Date(app.createdAt)}
                   availabilityType={app.availabilityType}
                   currentStage={app.stage}

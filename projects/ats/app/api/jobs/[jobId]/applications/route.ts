@@ -22,6 +22,11 @@ export async function GET(
             lastName: true,
           },
         },
+        job: {
+          select: {
+            title: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
