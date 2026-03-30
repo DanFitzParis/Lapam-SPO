@@ -17,6 +17,7 @@ interface Application {
 }
 
 interface KanbanBoardProps {
+  jobId: string
   applications: Application[]
   isUkLocation?: boolean
   onStageChange: (applicationId: string, newStage: string) => Promise<void>
@@ -29,7 +30,7 @@ const STAGES = [
   { key: 'OFFER', label: 'Offer', color: 'bg-green-50' },
 ]
 
-export function KanbanBoard({ applications, isUkLocation = false, onStageChange }: KanbanBoardProps) {
+export function KanbanBoard({ applications, jobId, isUkLocation = false, onStageChange }: KanbanBoardProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {STAGES.map((stage) => {
@@ -46,6 +47,7 @@ export function KanbanBoard({ applications, isUkLocation = false, onStageChange 
                 <CandidateCard
                   key={app.id}
                   applicationId={app.id}
+                  jobId={jobId}
                   candidateName={`${app.candidate.firstName} ${app.candidate.lastName}`}
                   jobTitle={app.job.title}
                   appliedAt={new Date(app.createdAt)}

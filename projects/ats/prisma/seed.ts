@@ -271,7 +271,7 @@ async function main() {
     await prisma.application.create({
       data: {
         id: applicationId, tenantId: T, jobId: c.jobId, candidateId,
-        stage: c.stage as any, source: c.source as any,
+        stage: c.stage as any, source: c.source as any, availabilityType: ["IMMEDIATE", "TWO_WEEKS", "ONE_MONTH"][Math.floor(Math.random() * 3)] as any,
         createdAt: daysAgo(c.daysBack),
       },
     });
