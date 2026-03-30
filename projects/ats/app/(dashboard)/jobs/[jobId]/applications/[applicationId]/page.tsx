@@ -9,14 +9,32 @@ import { InterviewQuestions } from "@/components/pipeline/interview-questions"
 interface Application {
   id: string
   stage: string
+  source?: string
+  availabilityType?: string
   candidate: {
     firstName: string
     lastName: string
+    email?: string
+    mobileNumber?: string
   }
   job: {
+    id: string
     title: string
     locationType?: string
   }
+  rightToWorkCheck?: {
+    checkType: string
+    result: string
+  }
+  offer?: {
+    status: string
+    sentAt: string
+  }
+  interviewSlots?: Array<{
+    status: string
+    confirmedAt?: string
+    proposedAt: string
+  }>
 }
 
 interface Message {
@@ -42,7 +60,6 @@ export default function ApplicationDetailPage({
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Unwrap params promise
   useEffect(() => {
     params.then((p) => {
       setJobId(p.jobId)
@@ -55,19 +72,15 @@ export default function ApplicationDetailPage({
 
     async function fetchData() {
       try {
-        // Fetch application details (would need endpoint)
-        // For now, mock minimal data
-        setApplication({
-          id: applicationId!,
-          stage: 'SCREENING',
-          candidate: { firstName: 'John', lastName: 'Doe' },
-          job: { title: 'Head Chef', locationType: 'RESTAURANT' },
-        })
+        const appRes = await fetch(`/api/applications/${applicationId}`)
+        if (appRes.ok) {
+          const data = await appRes.json()
+          setApplication(data)
+        }
 
-        // Fetch messages
-        const res = await fetch(`/api/applications/${applicationId}/messages`)
-        if (res.ok) {
-          const data = await res.json()
+        const msgRes = await fetch(`/api/applications/${applicationId}/messages`)
+        if (msgRes.ok) {
+          const data = await msgRes.json()
           setMessages(data)
         }
       } catch (error) {
@@ -81,7 +94,6 @@ export default function ApplicationDetailPage({
   }, [applicationId])
 
   async function handleMessageSent() {
-    // Refresh messages
     if (!applicationId) return
     const res = await fetch(`/api/applications/${applicationId}/messages`)
     if (res.ok) {
@@ -97,6 +109,10 @@ export default function ApplicationDetailPage({
       </div>
     )
   }
+
+  const rtwCheck = application.rightToWorkCheck
+  const offer = application.offer
+  const interview = application.interviewSlots?.[0]
 
   return (
     <div className="p-8">
@@ -116,6 +132,58 @@ export default function ApplicationDetailPage({
       </div>
 
       <div className="space-y-6">
+        {/* RTW Section */}
+        {(application.stage === 'INTERVIEW' || application.stage === 'OFFER' || application.stage === 'HIRED') && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold mb-3">Right to Work</h2>
+            {rtwCheck ? (
+              <div>
+                <p className="text-sm">
+                  <span className="font-medium">Result:</span>{' '}
+                  <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
+                    rtwCheck.result === 'PASS' ? 'bg-green-100 text-green-800' :
+                    rtwCheck.result === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {rtwCheck.result}
+                  </span>
+                </p>
+                <p className="text-sm mt-2">
+                  <span className="font-medium">Check Type:</span> {rtwCheck.checkType}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No RTW check completed</p>
+            )}
+          </div>
+        )}
+
+        {/* Offer Section */}
+        {(application.stage === 'OFFER' || application.stage === 'HIRED') && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold mb-3">Offer</h2>
+            {offer ? (
+              <div className="space-y-2">
+                <p className="text-sm">
+                  <span className="font-medium">Status:</span>{' '}
+                  <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
+                    offer.status === 'ACCEPTED' ? 'bg-green-100 text-green-800' :
+                    offer.status === 'SENT' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {offer.status}
+                  </span>
+                </p>
+                <p className="text-sm">
+                  <span className="font-medium">Sent:</span> {new Date(offer.sentAt).toLocaleDateString()}
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No offer sent</p>
+            )}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <h2 className="text-lg font-semibold mb-3">Send Message</h2>

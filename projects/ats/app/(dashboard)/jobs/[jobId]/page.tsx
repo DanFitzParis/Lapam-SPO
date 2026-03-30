@@ -126,6 +126,7 @@ export default function JobDetailPage({
       </div>
 
       <KanbanBoard
+        jobId={jobId!}
         applications={applications}
         isUkLocation={job.location?.country === 'GB'}
         onStageChange={handleStageChange}

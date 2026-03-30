@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -19,6 +20,7 @@ interface ScreeningResponse {
 
 interface CandidateCardProps {
   applicationId: string
+  jobId: string
   candidateName: string
   jobTitle: string
   appliedAt: Date
@@ -33,6 +35,7 @@ interface CandidateCardProps {
 
 export function CandidateCard({
   applicationId,
+  jobId,
   candidateName,
   jobTitle,
   appliedAt,
@@ -89,7 +92,12 @@ export function CandidateCard({
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <h4 className="font-medium text-gray-900">{candidateName}</h4>
+            <Link
+              href={`/jobs/${jobId}/applications/${applicationId}`}
+              className="font-medium text-gray-900 hover:text-blue-600 underline"
+            >
+              {candidateName}
+            </Link>
             {isKnockoutFlagged && (
               <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
                 ⚠️ Knockout
