@@ -13,8 +13,7 @@ interface Job {
   location?: {
     name: string
   }
-  _count?: {
-    applications: number
+  applicationCount?: number
   }
 }
 
@@ -121,7 +120,7 @@ export default function JobsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {job._count?.applications || 0}
+                    {job.applicationCount || 0}
                   </td>
                 </tr>
               ))}
