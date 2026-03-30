@@ -14,7 +14,6 @@ interface Job {
     name: string
   }
   applicationCount?: number
-  }
 }
 
 export default function JobsPage() {
