@@ -121,13 +121,13 @@ export default function JobDetailPage({
         </button>
         <h1 className="text-2xl font-bold">{job.title}</h1>
         <p className="text-gray-600">
-          {job.location.name}, {job.location.country}
+          {job.location?.name ?? 'No location'}{job.location?.country ? `, ${job.location.country}` : ''}
         </p>
       </div>
 
       <KanbanBoard
         applications={applications}
-        isUkLocation={job.location.country === 'GB'}
+        isUkLocation={job.location?.country === 'GB'}
         onStageChange={handleStageChange}
       />
     </div>
