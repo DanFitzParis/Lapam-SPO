@@ -101,7 +101,7 @@ export function CandidateCard({
           </p>
         </div>
         <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700">
-          {availabilityType.replace('_', ' ')}
+          {availabilityType?.replace('_', ' ') ?? 'N/A'}
         </span>
       </div>
 
