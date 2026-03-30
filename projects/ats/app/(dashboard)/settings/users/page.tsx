@@ -1,17 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useAuth, useOrganization } from "@clerk/nextjs"
+import { useOrganization } from "@clerk/nextjs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-
-interface OrganizationMember {
-  id: string
-  userId: string
-  publicMetadata: {
-    role?: string
-  }
-}
 
 export default function UsersPage() {
   const { organization } = useOrganization()
@@ -52,6 +44,25 @@ export default function UsersPage() {
     }
   }
 
+  function getUserDisplay(member: any): string {
+    const userData = member.publicUserData
+    
+    if (userData) {
+      // Try full name first
+      if (userData.firstName || userData.lastName) {
+        return [userData.firstName, userData.lastName].filter(Boolean).join(' ')
+      }
+      
+      // Fall back to identifier (email)
+      if (userData.identifier) {
+        return userData.identifier
+      }
+    }
+    
+    // Last resort: show user ID
+    return member.userId || userData?.userId || 'Unknown'
+  }
+
   if (loading) return <div className="p-8">Loading...</div>
 
   return (
@@ -61,7 +72,7 @@ export default function UsersPage() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>User ID</TableHead>
+            <TableHead>User</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -69,7 +80,7 @@ export default function UsersPage() {
         <TableBody>
           {members.map((member) => (
             <TableRow key={member.id}>
-              <TableCell>{member.publicUserData?.userId || member.userId}</TableCell>
+              <TableCell>{getUserDisplay(member)}</TableCell>
               <TableCell>{member.role || '—'}</TableCell>
               <TableCell>
                 <Button
@@ -78,7 +89,8 @@ export default function UsersPage() {
                   onClick={() => {
                     const locationId = prompt('Enter location ID to assign:')
                     if (locationId) {
-                      assignToLocation(member.publicUserData?.userId || member.userId, locationId)
+                      const userId = member.publicUserData?.userId || member.userId
+                      assignToLocation(userId, locationId)
                     }
                   }}
                 >
