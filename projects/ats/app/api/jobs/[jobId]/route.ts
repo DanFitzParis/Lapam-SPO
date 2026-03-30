@@ -26,6 +26,13 @@ export async function GET(
         title: true,
         description: true,
         locationId: true,
+        location: {
+          select: {
+            id: true,
+            name: true,
+            country: true,
+          },
+        },
         locationType: true,
         employmentType: true,
         status: true,
@@ -107,6 +114,13 @@ export async function PATCH(
         title: true,
         description: true,
         locationId: true,
+        location: {
+          select: {
+            id: true,
+            name: true,
+            country: true,
+          },
+        },
         locationType: true,
         employmentType: true,
         status: true,

@@ -51,6 +51,13 @@ export async function GET(request: NextRequest) {
         title: true,
         description: true,
         locationId: true,
+        location: {
+          select: {
+            id: true,
+            name: true,
+            country: true,
+          },
+        },
         locationType: true,
         employmentType: true,
         status: true,
@@ -123,6 +130,13 @@ export async function POST(request: NextRequest) {
         title: true,
         description: true,
         locationId: true,
+        location: {
+          select: {
+            id: true,
+            name: true,
+            country: true,
+          },
+        },
         locationType: true,
         employmentType: true,
         status: true,

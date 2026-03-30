@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { StaleAlertBadge } from "./stale-alert-badge"
 
 interface LocationCardProps {
@@ -24,10 +23,7 @@ export function LocationCard({
   staleAlert,
 }: LocationCardProps) {
   return (
-    <Link
-      href={`/locations/${locationId}`}
-      className="block p-6 bg-white border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition"
-    >
+    <div className="block p-6 bg-white border border-gray-200 rounded-lg">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900">{locationName}</h3>
@@ -67,6 +63,6 @@ export function LocationCard({
           <p className="text-green-600">Offer</p>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
