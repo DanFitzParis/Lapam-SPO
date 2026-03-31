@@ -1,26 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Shell vs Workspace */
+  --color-shell-bg: #1D122C;
+  --color-workspace-bg: #F3F2F5;
+  --color-surface: #FFFFFF;
+
+  /* Neutrals */
+  --color-neutral-600: #23252E;
+  --color-neutral-500: #2D2F3A;
+  --color-neutral-400: #3D424F;
+  --color-neutral-300: #585F7B;
+  --color-neutral-200: #9BA2C0;
+  --color-neutral-100: #DADBE7;
+  --color-neutral-50: #F3F2F5;
+
+  /* Brand */
+  --color-brand-purple: #5B2D8E;
+  --color-brand-purple-100: #EDE9F5;
+
+  /* Semantic */
+  --color-success-300: #278740;
+  --color-success-100: #ECF4EE;
+  --color-error-300: #DA242D;
+  --color-error-100: #FCEEEF;
+  --color-warning-300: #FFAC3D;
+  --color-warning-100: #FFF3E2;
+
+  /* Agent accent colours */
+  --agent-lyra: #1E3A5F;
+  --agent-maren: #0D9488;
+  --agent-kai: #D97706;
+  --agent-tova: #7C3AED;
+  --agent-jaro: #475569;
+
+  /* Motion */
+  --motion-fast: 120ms cubic-bezier(0.2, 0, 0, 1);
+  --motion-base: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --motion-slow: 240ms cubic-bezier(0.2, 0, 0, 1);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Map CSS vars to Tailwind utilities */
+  --color-shell: var(--color-shell-bg);
+  --color-workspace: var(--color-workspace-bg);
+  --color-surface: var(--color-surface);
+
+  --color-brand-purple: var(--color-brand-purple);
+  --color-brand-purple-100: var(--color-brand-purple-100);
+
+  --color-success-300: var(--color-success-300);
+  --color-success-100: var(--color-success-100);
+  --color-error-300: var(--color-error-300);
+  --color-error-100: var(--color-error-100);
+  --color-warning-300: var(--color-warning-300);
+  --color-warning-100: var(--color-warning-100);
+
+  --font-sans: 'Montserrat', system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background: var(--color-workspace-bg);
+  color: var(--color-neutral-600);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
