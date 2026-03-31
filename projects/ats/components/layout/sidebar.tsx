@@ -39,9 +39,9 @@ export function Sidebar() {
 
   const nav = (
     <div className="flex flex-col h-full bg-brand-400 text-white">
-      {/* Logo/Brand header */}
+      {/* Logo/Brand header - explicit white color to override global h1 styles */}
       <div className="p-6 border-b border-white/10">
-        <h1 className="text-xl font-semibold tracking-tight">Lapam</h1>
+        <h1 className="text-xl font-semibold tracking-tight !text-white">Lapam</h1>
       </div>
 
       {/* Main navigation */}
@@ -66,9 +66,9 @@ export function Sidebar() {
           )
         })}
 
-        {/* Settings section */}
+        {/* Settings section - explicit white color for label */}
         <div className="pt-4 mt-4 border-t border-white/10">
-          <div className="px-4 py-2 text-xs font-semibold text-white/64 uppercase tracking-wider">
+          <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider !text-white/64">
             Settings
           </div>
           {settingsItems.map((item) => {
