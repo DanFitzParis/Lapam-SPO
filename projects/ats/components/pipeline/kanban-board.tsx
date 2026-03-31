@@ -1,5 +1,6 @@
 "use client"
 
+import { Badge } from "@/components/ui/badge"
 import { CandidateCard } from "./candidate-card"
 
 interface Application {
@@ -24,10 +25,10 @@ interface KanbanBoardProps {
 }
 
 const STAGES = [
-  { key: 'APPLIED', label: 'Applied', color: 'bg-gray-50' },
-  { key: 'SCREENING', label: 'Screening', color: 'bg-blue-50' },
-  { key: 'INTERVIEW', label: 'Interview', color: 'bg-purple-50' },
-  { key: 'OFFER', label: 'Offer', color: 'bg-green-50' },
+  { key: 'APPLIED', label: 'Applied', bgColor: 'bg-neutral-50' },
+  { key: 'SCREENING', label: 'Screening', bgColor: 'bg-brand-100/30' },
+  { key: 'INTERVIEW', label: 'Interview', bgColor: 'bg-brand-100/50' },
+  { key: 'OFFER', label: 'Offer', bgColor: 'bg-[#ECF4EE]' },
 ]
 
 export function KanbanBoard({ applications, jobId, isUkLocation = false, onStageChange }: KanbanBoardProps) {
@@ -37,10 +38,10 @@ export function KanbanBoard({ applications, jobId, isUkLocation = false, onStage
         const stageApplications = applications.filter((app) => app.stage === stage.key)
 
         return (
-          <div key={stage.key} className={`rounded-lg p-4 ${stage.color}`}>
+          <div key={stage.key} className={`rounded-2xl p-4 ${stage.bgColor}`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">{stage.label}</h3>
-              <span className="text-sm text-gray-600">{stageApplications.length}</span>
+              <h3 className="text-base font-semibold text-neutral-500">{stage.label}</h3>
+              <Badge variant="neutral">{stageApplications.length}</Badge>
             </div>
             <div className="space-y-3">
               {stageApplications.map((app) => (
@@ -58,7 +59,7 @@ export function KanbanBoard({ applications, jobId, isUkLocation = false, onStage
                 />
               ))}
               {stageApplications.length === 0 && (
-                <p className="text-sm text-gray-400 text-center py-4">No candidates</p>
+                <p className="text-sm text-neutral-400 text-center py-4">No candidates</p>
               )}
             </div>
           </div>

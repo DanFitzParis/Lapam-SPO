@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import {
   Select,
   SelectContent,
@@ -60,7 +61,6 @@ export function CandidateCard({
   async function handleStageChange(newStage: string) {
     if (newStage === currentStage) return
 
-    // Confirmation for REJECTED
     if (newStage === 'REJECTED') {
       setSelectedStage(newStage)
       setShowConfirm(true)
@@ -77,7 +77,7 @@ export function CandidateCard({
       setShowConfirm(false)
     } catch (error) {
       console.error('Stage change failed:', error)
-      setSelectedStage(currentStage) // Revert on error
+      setSelectedStage(currentStage)
     } finally {
       setLoading(false)
     }
@@ -88,29 +88,27 @@ export function CandidateCard({
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+    <div className="bg-white border border-neutral-100 rounded-2xl p-4 space-y-3 shadow-sm">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
             <Link
               href={`/jobs/${jobId}/applications/${applicationId}`}
-              className="font-medium text-gray-900 hover:text-blue-600 underline"
+              className="font-medium text-neutral-500 hover:text-brand-300 underline"
             >
               {candidateName}
             </Link>
             {isKnockoutFlagged && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
-                ⚠️ Knockout
-              </span>
+              <Badge variant="warning">⚠️ Knockout</Badge>
             )}
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-neutral-300 mt-1">
             Applied {timeSinceApplied === 0 ? 'today' : `${timeSinceApplied}d ago`}
           </p>
         </div>
-        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-700">
+        <Badge variant="neutral">
           {availabilityType?.replace('_', ' ') ?? 'N/A'}
-        </span>
+        </Badge>
       </div>
 
       {screeningResponses.length > 0 && (
@@ -118,21 +116,21 @@ export function CandidateCard({
           <button
             type="button"
             onClick={() => setShowScreening(!showScreening)}
-            className="text-sm text-blue-600 hover:text-blue-700 underline"
+            className="text-sm text-brand-300 hover:text-brand-400 underline"
           >
             {showScreening ? 'Hide' : 'Show'} screening responses ({screeningResponses.length})
           </button>
           {showScreening && (
-            <div className="mt-2 space-y-2 bg-gray-50 rounded p-3">
+            <div className="mt-2 space-y-2 bg-neutral-50 rounded-lg p-3">
               {screeningResponses.map((sr, idx) => (
                 <div key={idx} className="text-sm">
-                  <p className="font-medium text-gray-700 flex items-center gap-1">
+                  <p className="font-medium text-neutral-500 flex items-center gap-1">
                     {sr.question}
                     {sr.isKnockout && (
-                      <span className="text-orange-600 text-xs">(knockout)</span>
+                      <span className="text-[#B8860B] text-xs">(knockout)</span>
                     )}
                   </p>
-                  <p className="text-gray-600 ml-2">{sr.response}</p>
+                  <p className="text-neutral-400 ml-2">{sr.response}</p>
                 </div>
               ))}
             </div>
@@ -141,37 +139,37 @@ export function CandidateCard({
       )}
 
       {currentStage === 'HIRED' && (
-        <div className="border-t pt-3">
+        <div className="border-t border-neutral-100 pt-3">
           <Button
             type="button"
             size="sm"
-            variant="outline"
+            variant="secondary"
             onClick={() => setShowCloseHire(true)}
             className="w-full"
           >
             Close Hire Record
           </Button>
-          <p className="text-xs text-gray-500 mt-1 text-center">
+          <p className="text-xs text-neutral-300 mt-1 text-center">
             Add to talent pool for future roles
           </p>
         </div>
       )}
 
       {currentStage === 'OFFER' && isUkLocation && (
-        <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
+        <div className="text-xs text-[#B8860B] bg-[#FFF3E2] p-2 rounded-lg">
           ⚠️ UK location — right to work check required before HIRED
         </div>
       )}
 
       {showConfirm ? (
-        <div className="space-y-2 border-t pt-3">
-          <p className="text-sm text-gray-600">
+        <div className="space-y-2 border-t border-neutral-100 pt-3">
+          <p className="text-sm text-neutral-400">
             Are you sure you want to reject this application?
           </p>
           <div className="flex gap-2">
             <Button
               size="sm"
-              variant="default"
+              variant="destructive"
               onClick={() => performStageChange(selectedStage)}
               disabled={loading}
             >
@@ -179,7 +177,7 @@ export function CandidateCard({
             </Button>
             <Button
               size="sm"
-              variant="outline"
+              variant="secondary"
               onClick={() => {
                 setShowConfirm(false)
                 setSelectedStage(currentStage)
