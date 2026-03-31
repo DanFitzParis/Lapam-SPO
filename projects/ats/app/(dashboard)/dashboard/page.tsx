@@ -36,39 +36,38 @@ export default function DashboardPage() {
   }
 
   useEffect(() => {
-    // Initial fetch
     fetchDashboard()
-
-    // Poll every 10 seconds
     const interval = setInterval(fetchDashboard, 10000)
-
     return () => clearInterval(interval)
   }, [])
 
   if (loading) {
     return (
-      <div className="p-8">
-        <p className="text-gray-500">Loading dashboard...</p>
+      <div className="p-5 md:p-6">
+        <div className="flex items-center gap-3">
+          <div className="h-5 w-5 border-2 border-brand-300 border-t-transparent rounded-full animate-spin" />
+          <p className="text-neutral-300">Loading dashboard...</p>
+        </div>
       </div>
     )
   }
 
   if (locations.length === 0) {
     return (
-      <div className="p-8">
-        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-        <p className="text-gray-500">No locations found.</p>
+      <div className="p-5 md:p-6 space-y-6">
+        <h1 className="text-2xl font-bold text-neutral-500">Dashboard</h1>
+        <p className="text-neutral-300 text-center py-12">No locations found.</p>
       </div>
     )
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-sm text-gray-500">Updates every 10 seconds</p>
+    <div className="p-5 md:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-neutral-500">Dashboard</h1>
+        <p className="text-sm text-neutral-300">Updates every 10 seconds</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {locations.map((location) => (
           <LocationCard key={location.locationId} {...location} />
         ))}
