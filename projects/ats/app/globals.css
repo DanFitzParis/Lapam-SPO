@@ -1,1 +1,67 @@
 @import "tailwindcss";
+
+@theme {
+  /* Brand colors */
+  --color-brand-400: #1D122C;
+  --color-brand-300: #301E4A;
+  --color-brand-200: #D6D3FF;
+  --color-brand-100: #F2EEF9;
+  
+  /* Accent */
+  --color-accent: #18B6C3;
+  
+  /* Neutral palette */
+  --color-neutral-600: #23252E;
+  --color-neutral-500: #2D2F3A;
+  --color-neutral-400: #3D424F;
+  --color-neutral-300: #585F7B;
+  --color-neutral-200: #9BA2C0;
+  --color-neutral-100: #DADBE7;
+  --color-neutral-50: #F3F2F5;
+  --color-neutral-0: #FFFFFF;
+  
+  /* Semantic/destructive */
+  --color-destructive: #DA242D;
+  
+  /* Font family */
+  --font-family-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* shadcn/ui CSS variables for component theming */
+@layer base {
+  :root {
+    --background: #F3F2F5;
+    --foreground: #2D2F3A;
+    
+    --card: #FFFFFF;
+    --card-foreground: #2D2F3A;
+    
+    --primary: #301E4A;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F2EEF9;
+    --secondary-foreground: #301E4A;
+    
+    --muted: #F3F2F5;
+    --muted-foreground: #585F7B;
+    
+    --accent: #F2EEF9;
+    --accent-foreground: #301E4A;
+    
+    --destructive: #DA242D;
+    --destructive-foreground: #FFFFFF;
+    
+    --border: #DADBE7;
+    --input: #DADBE7;
+    --ring: rgba(48, 30, 74, 0.24);
+    
+    --radius: 0.5rem;
+  }
+  
+  body {
+    font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+    background-color: #F3F2F5;
+    color: #2D2F3A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
