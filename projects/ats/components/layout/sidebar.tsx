@@ -38,11 +38,13 @@ export function Sidebar() {
   }
 
   const nav = (
-    <div className="flex flex-col h-full bg-gray-900 text-white">
-      <div className="p-6 border-b border-gray-800">
-        <h1 className="text-xl font-bold">Lapam ATS</h1>
+    <div className="flex flex-col h-full bg-brand-400 text-white">
+      {/* Logo/Brand header */}
+      <div className="p-6 border-b border-white/10">
+        <h1 className="text-xl font-semibold tracking-tight">Lapam</h1>
       </div>
 
+      {/* Main navigation */}
       <nav className="flex-1 p-4 space-y-1">
         {navItems.map((item) => {
           const Icon = item.icon
@@ -53,19 +55,20 @@ export function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 active
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  ? "bg-brand-300 text-white"
+                  : "text-white/88 hover:bg-white/10"
               }`}
               onClick={() => setMobileOpen(false)}
             >
               <Icon className="w-5 h-5" />
-              <span>{item.label}</span>
+              <span className="font-medium">{item.label}</span>
             </Link>
           )
         })}
 
-        <div className="pt-4 mt-4 border-t border-gray-800">
-          <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        {/* Settings section */}
+        <div className="pt-4 mt-4 border-t border-white/10">
+          <div className="px-4 py-2 text-xs font-semibold text-white/64 uppercase tracking-wider">
             Settings
           </div>
           {settingsItems.map((item) => {
@@ -76,23 +79,30 @@ export function Sidebar() {
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   active
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                    ? "bg-brand-300 text-white"
+                    : "text-white/88 hover:bg-white/10"
                 }`}
                 onClick={() => setMobileOpen(false)}
               >
                 <Settings className="w-5 h-5" />
-                <span>{item.label}</span>
+                <span className="font-medium">{item.label}</span>
               </Link>
             )
           })}
         </div>
       </nav>
 
-      <div className="p-4 border-t border-gray-800">
+      {/* User controls */}
+      <div className="p-4 border-t border-white/10">
         <div className="flex items-center gap-3">
-          <UserButton />
-          <span className="text-sm text-gray-400">Account</span>
+          <UserButton 
+            appearance={{
+              elements: {
+                avatarBox: "w-8 h-8"
+              }
+            }}
+          />
+          <span className="text-sm text-white/88">Account</span>
         </div>
       </div>
     </div>
@@ -100,25 +110,29 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
+      {/* Mobile toggle button */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-900 text-white rounded-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-brand-400 text-white rounded-lg shadow-lg"
+        aria-label="Toggle navigation"
       >
         {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:block w-64 flex-shrink-0">{nav}</div>
+      <div className="hidden lg:block w-[272px] flex-shrink-0">{nav}</div>
 
-      {/* Mobile sidebar */}
+      {/* Mobile sidebar overlay */}
       {mobileOpen && (
         <>
           <div
-            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="lg:hidden fixed inset-0 bg-black/50 z-40"
             onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
           />
-          <div className="lg:hidden fixed inset-y-0 left-0 w-64 z-40">{nav}</div>
+          <div className="lg:hidden fixed inset-y-0 left-0 w-[272px] z-40 shadow-xl">
+            {nav}
+          </div>
         </>
       )}
     </>
