@@ -18,6 +18,7 @@
     "@aws-sdk/client-s3": "^3.1015.0",
     "@aws-sdk/s3-request-presigner": "^3.1015.0",
     "@clerk/nextjs": "^7.0.6",
+    "@fontsource/montserrat": "^5.2.8",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",

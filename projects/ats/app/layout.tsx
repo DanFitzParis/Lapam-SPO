@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from '@clerk/nextjs';
+import "@fontsource/montserrat/400.css";
+import "@fontsource/montserrat/500.css";
+import "@fontsource/montserrat/600.css";
+import "@fontsource/montserrat/700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +19,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>{children}</body>
+        <body className="bg-neutral-50">{children}</body>
       </html>
     </ClerkProvider>
   );
