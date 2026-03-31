@@ -1,0 +1,51 @@
+name: "MC: Type Check + Lint + Test + Build"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "projects/mission-control/**"
+      - ".github/workflows/mc-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "projects/mission-control/**"
+      - ".github/workflows/mc-ci.yml"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/mission-control
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Biome lint
+        run: pnpm lint
+
+      - name: Vitest run
+        run: pnpm test
+
+      - name: Next.js build
+        run: pnpm build
