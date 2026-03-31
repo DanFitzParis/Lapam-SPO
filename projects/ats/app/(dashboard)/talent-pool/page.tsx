@@ -100,14 +100,14 @@ export default function TalentPoolPage() {
 
   if (loading) {
     return (
-      <div className="p-8">
+      <div className="p-5 md:p-6 space-y-6">
         <p className="text-gray-500">Loading talent pool...</p>
       </div>
     )
   }
 
   return (
-    <div className="p-8">
+    <div className="p-5 md:p-6 space-y-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-4">Talent Pool</h1>
         

@@ -3,6 +3,16 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Plus } from "lucide-react"
 
 interface Job {
@@ -40,16 +50,19 @@ export default function JobsPage() {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <p className="text-gray-500">Loading jobs...</p>
+      <div className="p-5 md:p-6">
+        <div className="flex items-center gap-3">
+          <div className="h-5 w-5 border-2 border-brand-300 border-t-transparent rounded-full animate-spin" />
+          <p className="text-neutral-300">Loading jobs...</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Jobs</h1>
+    <div className="p-5 md:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-neutral-500">Jobs</h1>
         <Link href="/jobs/new">
           <Button>
             <Plus className="w-4 h-4 mr-2" />
@@ -59,73 +72,66 @@ export default function JobsPage() {
       </div>
 
       {jobs.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-8 text-center">
-          <p className="text-gray-500 mb-4">No jobs yet</p>
-          <Link href="/jobs/new">
-            <Button>Create your first job</Button>
-          </Link>
-        </div>
+        <Card>
+          <CardContent className="pt-12 pb-12 text-center">
+            <p className="text-neutral-300 mb-4">No jobs yet</p>
+            <Link href="/jobs/new">
+              <Button>Create your first job</Button>
+            </Link>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Location
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Type
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Applications
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {jobs.map((job) => (
-                <tr
-                  key={job.id}
-                  className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => (window.location.href = `/jobs/${job.id}`)}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{job.title}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Applications</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {jobs.map((job) => (
+                  <TableRow key={job.id}>
+                    <TableCell>
+                      <Link
+                        href={`/jobs/${job.id}`}
+                        className="font-medium text-neutral-500 hover:text-brand-300 underline"
+                      >
+                        {job.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-neutral-400">
                       {job.location?.name || "—"}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{job.locationType}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        job.status === "OPEN"
-                          ? "bg-green-100 text-green-800"
-                          : job.status === "CLOSED"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {job.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {job.applicationCount || 0}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </TableCell>
+                    <TableCell className="text-neutral-400">
+                      {job.locationType.replace(/_/g, " ")}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          job.status === "PUBLISHED"
+                            ? "success"
+                            : job.status === "DRAFT"
+                              ? "warning"
+                              : "neutral"
+                        }
+                      >
+                        {job.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right text-neutral-500 font-medium">
+                      {job.applicationCount ?? 0}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       )}
     </div>
   )

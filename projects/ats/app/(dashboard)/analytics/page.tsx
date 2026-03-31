@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MetricsTable } from "@/components/analytics/metrics-table"
 
 interface AnalyticsData {
@@ -83,73 +84,89 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <p className="text-gray-500">Loading analytics...</p>
+      <div className="p-6 md:p-8">
+        <div className="flex items-center gap-3">
+          <div className="h-5 w-5 border-2 border-brand-300 border-t-transparent rounded-full animate-spin" />
+          <p className="text-neutral-300">Loading analytics...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="p-8">
-        <div className="bg-red-50 border border-red-200 rounded p-4 text-red-800">
-          {error}
+      <div className="p-6 md:p-8">
+        <div className="bg-[#FCEEEF] border border-[#DA242D]/20 rounded-xl p-4 text-[#DA242D]">
+          <p className="font-semibold">Error loading analytics</p>
+          <p className="text-sm mt-1">{error}</p>
         </div>
       </div>
     )
   }
 
-  if (!data) return null
+  if (!data) {
+    return (
+      <div className="p-6 md:p-8">
+        <p className="text-neutral-300 text-center py-12">No analytics data available</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Analytics</h1>
-        <Button onClick={exportCSV} variant="outline">
+    <div className="p-5 md:p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold text-neutral-500">Analytics</h1>
+        <Button onClick={exportCSV} variant="secondary">
           Export CSV
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">
-            Total Applications
-          </h3>
-          <p className="text-3xl font-bold text-gray-900">
-            {data.summary.totalApplications}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">Last 90 days</p>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-xs font-normal text-neutral-300 uppercase tracking-wider mb-2">
+              Total Applications
+            </h3>
+            <p className="text-3xl font-bold text-brand-300">
+              {data.summary.totalApplications}
+            </p>
+            <p className="text-xs text-neutral-300 mt-1">Last 90 days</p>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">
-            Avg Time to Fill
-          </h3>
-          <p className="text-3xl font-bold text-gray-900">
-            {data.summary.avgTimeToFill}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">days</p>
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-xs font-normal text-neutral-300 uppercase tracking-wider mb-2">
+              Avg Time to Fill
+            </h3>
+            <p className="text-3xl font-bold text-neutral-500">
+              {data.summary.avgTimeToFill}
+            </p>
+            <p className="text-xs text-neutral-300 mt-1">days</p>
+          </CardContent>
+        </Card>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">
-            Conversion Rate
-          </h3>
-          <p className="text-3xl font-bold text-gray-900">
-            {data.summary.conversionRate}%
-          </p>
-          <p className="text-xs text-gray-500 mt-1">applications to hires</p>
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-xs font-normal text-neutral-300 uppercase tracking-wider mb-2">
+              Conversion Rate
+            </h3>
+            <p className="text-3xl font-bold text-neutral-500">
+              {data.summary.conversionRate}%
+            </p>
+            <p className="text-xs text-neutral-300 mt-1">applications to hires</p>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold">Metrics by Location</h2>
-        </div>
-        <div className="p-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Metrics by Location</CardTitle>
+        </CardHeader>
+        <CardContent>
           <MetricsTable metrics={data.locationMetrics} />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
