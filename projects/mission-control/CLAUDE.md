@@ -214,7 +214,10 @@ Visual consistency is critical. Follow these rules when implementing UI:
 
 - **Sidebar brand:** "SPO" (h1) with "Mission Control" (subtitle) — not the reverse
 - **Visual source of truth:** Lovable prototype at `projects/mission-control/docs/design-reference/`
-- **Sidebar width:** Targets ~192px (w-48), not 256px
+- **Sidebar width:** w-60 (240px), not w-48 or w-64
+- **Active nav:** Solid brand-purple background, not semi-transparent white
+- **Text colors:** Subtitle uses text-white/65, inactive nav uses text-white/90
+- **DevTools inspection:** Always inspect Lovable prototype with DevTools for exact values rather than eyeballing
 - **When in doubt:** Flag for operator review rather than guessing
 
 ---
