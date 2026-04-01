@@ -20,7 +20,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 mt-2 space-y-1">
+      <nav className="flex-1 flex flex-col gap-1 px-3 mt-2">
         <NavItem href="/team" icon={Users} label="Team" />
         <NavItem href="/projects" icon={FolderKanban} label="Projects" />
         <NavItem href="/activity" icon={Activity} label="Live Activity" />
