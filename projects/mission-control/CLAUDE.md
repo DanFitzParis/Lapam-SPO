@@ -212,11 +212,13 @@ Agent status derived from `activity_events` timestamps:
 
 Visual consistency is critical. Follow these rules when implementing UI:
 
+- **Authoritative visual spec:** `sidebar-visual-reference.md` in `docs/design-reference/` contains exact computed values from the Lovable prototype. Check all properties against this file, not by guessing.
 - **Sidebar brand:** "SPO" (h1) with "Mission Control" (subtitle) — not the reverse
 - **Visual source of truth:** Lovable prototype at `projects/mission-control/docs/design-reference/`
 - **Sidebar width:** w-60 (240px), not w-48 or w-64
-- **Active nav:** Solid brand-purple background, not semi-transparent white
-- **Text colors:** Subtitle uses text-white/65, inactive nav uses text-white/90
+- **Active nav:** Background `#301E4A`, not brand-purple (`#5B2D8E`)
+- **Text colors:** Subtitle uses `rgba(255,255,255,0.64)`, inactive nav uses `rgba(255,255,255,0.88)`
+- **Border radius:** Nav items use `rounded-2xl` (16px), not `rounded-lg` (8px)
 - **DevTools inspection:** Always inspect Lovable prototype with DevTools for exact values rather than eyeballing
 - **When in doubt:** Flag for operator review rather than guessing
 

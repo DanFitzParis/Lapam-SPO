@@ -19,12 +19,14 @@ export function NavItem({ href, icon: Icon, label }: NavItemProps) {
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-        "text-sm font-medium",
-        isActive
-          ? "text-white bg-[var(--color-brand-purple)]"
-          : "text-white/90 hover:text-white hover:bg-white/10"
+        "flex items-center gap-3 px-4 py-3 rounded-2xl",
+        "text-sm font-medium transition-all duration-[180ms]"
       )}
+      style={{
+        backgroundColor: isActive ? "#301E4A" : "transparent",
+        color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.88)",
+        transitionTimingFunction: "cubic-bezier(0.2, 0, 0, 1)",
+      }}
     >
       <Icon size={20} />
       <span>{label}</span>
