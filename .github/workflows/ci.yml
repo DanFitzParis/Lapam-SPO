@@ -41,7 +41,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
 
       - name: Install dependencies
         working-directory: projects/ats

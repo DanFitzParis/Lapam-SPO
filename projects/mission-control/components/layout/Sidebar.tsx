@@ -6,22 +6,14 @@ import { NavItem } from "./NavItem";
 export function Sidebar() {
   return (
     <aside
-      className="w-64 bg-shell flex flex-col"
+      className="w-48 bg-shell flex flex-col"
       style={{ backgroundColor: "var(--color-shell-bg)" }}
     >
       {/* Logo/Wordmark */}
       <div className="p-6">
-        <div className="flex items-center gap-2">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-            style={{ backgroundColor: "var(--color-brand-purple)" }}
-          >
-            MC
-          </div>
-          <div>
-            <h1 className="text-white text-lg font-bold leading-tight">Mission Control</h1>
-            <p className="text-neutral-200 text-xs">SPO Dashboard</p>
-          </div>
+        <div>
+          <h1 className="text-white text-lg font-bold leading-tight">SPO</h1>
+          <p className="text-neutral-200 text-xs">Mission Control</p>
         </div>
       </div>
 

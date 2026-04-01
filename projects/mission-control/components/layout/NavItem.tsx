@@ -21,7 +21,7 @@ export function NavItem({ href, icon: Icon, label }: NavItemProps) {
       className={cn(
         "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative",
         "text-sm font-medium",
-        isActive ? "text-white bg-white/5" : "text-neutral-200 hover:text-white hover:bg-white/5"
+        isActive ? "text-white bg-white/10" : "text-neutral-200 hover:text-white hover:bg-white/5"
       )}
       style={{
         borderLeft: isActive ? "3px solid var(--color-brand-purple)" : "3px solid transparent",

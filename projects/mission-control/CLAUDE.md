@@ -208,4 +208,15 @@ Agent status derived from `activity_events` timestamps:
 
 ---
 
+## Design QA Notes
+
+Visual consistency is critical. Follow these rules when implementing UI:
+
+- **Sidebar brand:** "SPO" (h1) with "Mission Control" (subtitle) — not the reverse
+- **Visual source of truth:** Lovable prototype at `projects/mission-control/docs/design-reference/`
+- **Sidebar width:** Targets ~192px (w-48), not 256px
+- **When in doubt:** Flag for operator review rather than guessing
+
+---
+
 _Version 1.0 — 2026-03-31_
