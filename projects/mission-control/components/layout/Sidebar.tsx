@@ -13,7 +13,9 @@ export function Sidebar() {
       <div className="px-5 pt-6 pb-4">
         <div>
           <h1 className="text-white text-2xl font-bold leading-tight">SPO</h1>
-          <p className="text-white/65 text-sm">Mission Control</p>
+          <p className="text-sm" style={{ color: "rgba(255, 255, 255, 0.64)" }}>
+            Mission Control
+          </p>
         </div>
       </div>
 
