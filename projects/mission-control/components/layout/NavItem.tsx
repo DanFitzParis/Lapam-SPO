@@ -19,13 +19,12 @@ export function NavItem({ href, icon: Icon, label }: NavItemProps) {
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative",
+        "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
         "text-sm font-medium",
-        isActive ? "text-white bg-white/10" : "text-neutral-200 hover:text-white hover:bg-white/5"
+        isActive
+          ? "text-white bg-[var(--color-brand-purple)]"
+          : "text-white/90 hover:text-white hover:bg-white/10"
       )}
-      style={{
-        borderLeft: isActive ? "3px solid var(--color-brand-purple)" : "3px solid transparent",
-      }}
     >
       <Icon size={20} />
       <span>{label}</span>
